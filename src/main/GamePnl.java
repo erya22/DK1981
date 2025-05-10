@@ -14,11 +14,11 @@ public class GamePnl extends JPanel implements Runnable{
 	//This works as a game screen: SCREEN SETTINGS
 	
 	public final int originalTileSize = 16; // 16x16, it's a standard default dimension
-	public final int scale = 4; //have to change it so that it adapts to the screen settings of the pc
+	public final int scale = 2; //have to change it so that it adapts to the screen settings of the pc
 	
 	public final int tileSize = originalTileSize * scale; //dimension of tiles on the screen
 	public final int maxScreenCol = 14;
-	public final int maxScreenRow = 16;
+	public final int maxScreenRow = 18;
 	public final int screenWidth = tileSize * maxScreenCol;
 	public final int screenHeight = tileSize * maxScreenRow;
 	
