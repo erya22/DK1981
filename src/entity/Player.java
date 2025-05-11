@@ -132,7 +132,7 @@ public class Player extends Entity {
 				break;
 		}
 		
-		g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+		g2.drawImage(image, x, y, (int)gp.tileSize, (int)gp.tileSize, null);
 	}
 	
 	public void getplayerImage() {

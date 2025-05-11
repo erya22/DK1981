@@ -13,14 +13,14 @@ import tile.TileManager;
 public class GamePnl extends JPanel implements Runnable{
 	//This works as a game screen: SCREEN SETTINGS
 	
-	public final int originalTileSize = 16; // 16x16, it's a standard default dimension
-	public final int scale = 2; //have to change it so that it adapts to the screen settings of the pc
+	public static final int scaledTileSize = 32; //, it's a standard default dimension
+	public static final int scale = 1; //have to change it so that it adapts to the screen settings of the pc
 	
-	public final int tileSize = originalTileSize * scale; //dimension of tiles on the screen
-	public final int maxScreenCol = 14;
-	public final int maxScreenRow = 18;
-	public final int screenWidth = tileSize * maxScreenCol;
-	public final int screenHeight = tileSize * maxScreenRow;
+	public static final int tileSize = scaledTileSize * scale; //dimension of tiles on the screen
+	public static final int maxScreenCol = 27;
+	public static final int maxScreenRow = 27;
+	public static final int screenWidth = tileSize * maxScreenCol;
+	public static final int screenHeight = tileSize * maxScreenRow;
 	
 	//FPS
 	public final int FPS = 60;
