@@ -9,7 +9,7 @@ public class Main {
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setResizable(false);
-		window.setTitle("2D ADVENTURE");
+		window.setTitle("DK VS MARIO 1981");
 		
 		GamePnl gamePanel = new GamePnl();
 		window.add(gamePanel);

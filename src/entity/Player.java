@@ -159,12 +159,12 @@ public class Player extends Entity {
     private void getPlayerImage() {
         try {
             // up/down 7 frames (b1..b7)
-            BufferedImage[] ud = new BufferedImage[7];
+            BufferedImage[] up = new BufferedImage[7];
             for (int i = 0; i < 7; i++) {
-                ud[i] = ImageIO.read(getClass().getResourceAsStream("/player/b" + (i+1) + ".png"));
+                up[i] = ImageIO.read(getClass().getResourceAsStream("/player/b" + (i+1) + ".png"));
             }
-            spriteMap.put("up", ud);
-            spriteMap.put("down", ud);
+            spriteMap.put("up", up);
+            spriteMap.put("down", up);
 
             // right 4 frames (a1..a4)
             BufferedImage[] right = new BufferedImage[4];
