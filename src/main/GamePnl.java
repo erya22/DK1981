@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 public class GamePnl extends JPanel implements Runnable{
@@ -16,11 +17,11 @@ public class GamePnl extends JPanel implements Runnable{
 	public static final int scaledTileSize = 32; //, it's a standard default dimension
 	public static final int scale = 1; //have to change it so that it adapts to the screen settings of the pc
 	
-	public static final int tileSize = scaledTileSize * scale; //dimension of tiles on the screen
-	public static final int maxScreenCol = 27;
-	public static final int maxScreenRow = 27;
-	public static final int screenWidth = tileSize * maxScreenCol;
-	public static final int screenHeight = tileSize * maxScreenRow;
+	public final int tileSize = scaledTileSize * scale; //dimension of tiles on the screen
+	public final int maxScreenCol = 27;
+	public final int maxScreenRow = 27;
+	public  int screenWidth = tileSize * maxScreenCol;
+	public  int screenHeight = tileSize * maxScreenRow;
 	
 	//FPS
 	public final int FPS = 60;
@@ -33,12 +34,20 @@ public class GamePnl extends JPanel implements Runnable{
 	
 	public TileManager tileM = new TileManager(this);
 	
+	public AssetSetter aSetter = new AssetSetter(this);
+	
+	public SuperObject obj[] = new SuperObject[10]; //we can display 10 objects at the same time.
+	
 	public GamePnl() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
 		this.setDoubleBuffered(true); //betters game rendering performance
 		this.addKeyListener(keyHandler);
 		this.setFocusable(true);
+	}
+	
+	public void setupGame() {
+		aSetter.setObject();
 	}
 
 	public void startGameThread() {
@@ -94,8 +103,17 @@ public class GamePnl extends JPanel implements Runnable{
 		
 		Graphics2D g2 = (Graphics2D) g;
 		
+		//TILE
 		tileM.draw(g2);
 		
+		//OBJECT
+		for(int i = 0; i < obj.length; i++) {
+			if(obj[i] != null) {
+				obj[i].draw(g2, this);
+			}
+		}
+		
+		//PLAYER
 		player.draw(g2);
 		
 		g2.dispose();

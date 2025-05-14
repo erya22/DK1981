@@ -12,6 +12,7 @@ public class Main {
 		window.setTitle("DK VS MARIO 1981");
 		
 		GamePnl gamePanel = new GamePnl();
+		
 		window.add(gamePanel);
 		
 		window.pack();
@@ -19,6 +20,7 @@ public class Main {
 		window.setLocationRelativeTo(null); //the window will be displayed at the center of the screen
 		window.setVisible(true);
 		
+		gamePanel.setupGame();
 		gamePanel.startGameThread();
 
 	}
