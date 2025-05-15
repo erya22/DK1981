@@ -13,18 +13,26 @@ import main.GamePnl;
 import main.KeyHandler;
 import object.Barrel;
 
-/**
- * TODO: in case I need to create different animations, I can use GIMP or piskel.
- */
 public class Player extends Entity {
+	
+	// GENERAL SETTINGS
     private GamePnl gp;
     private KeyHandler keyHandler;
+    
+    // GRAVITY/SPEED
     private int gravitySpeed;
     private boolean jumping = false;
     private int jumpSpeed;        // forza iniziale del salto
     private int yVelocity;         // velocità verticale corrente
+    
+    // GESTIONE VITE
+    private boolean invincible = false;
+    private int vite = 3; 
+    private long invincibleStartTime = 0;
+    private final int IMMUNITY = 2000; // 2 sec di immunità dopo essere colpito
+    private BufferedImage[] hitFrames = new BufferedImage[5]; // unico messo qua pk serve delay
 
-    // Map direction -> array of frames
+    // MAPPA
     private Map<String, BufferedImage[]> spriteMap = new HashMap<>();
 
     public Player(GamePnl gp, KeyHandler keyHandler) {
@@ -35,7 +43,7 @@ public class Player extends Entity {
         getPlayerImage();
     }
 
-    private void setDefaultValues() {
+    public void setDefaultValues() {
         x = 0;
         y = 700;
         speed = 4;
@@ -48,84 +56,93 @@ public class Player extends Entity {
     }
 
     public void update() {
-        // calcola il tile ai piedi di mario
-        int centerX = x + gp.tileSize / 2;
+        // Se game over o in hit animation, salta tutto
+        if (gp.gameOver || gp.isHitAnim) return;
+
+        // Aggiorna immunità
+        if (invincible) {
+            long elapsed = System.currentTimeMillis() - invincibleStartTime;
+            if (elapsed >= IMMUNITY) {
+                invincible = false;
+            }
+        }
+
+        // Gestione input e movimento
+        handleMovement();
+
+        // Controllo collisione con barili
+        handleBarrelCollision();
+    }
+
+    private void handleMovement() {
+        int centerX = x + gp.tileSize/2;
         int bottomY = y + gp.tileSize;
         int col = centerX / gp.tileSize;
         int rowBelow = bottomY / gp.tileSize;
-
         boolean onSolid = gp.tileM.isSolid(rowBelow, col);
         boolean onLadder = gp.tileM.isLadder(rowBelow, col);
 
-        // scala
+        // SCALA
         if (onLadder) {
-            if (keyHandler.upPressed) {
-                direction = "up";
-                y -= speed;
-                animate();
-                return;
-            } else if (keyHandler.downPressed) {
-                direction = "down";
-                y += speed;
-                animate();
-                return;
-            }
+            if (keyHandler.upPressed) { direction = "up"; y -= speed; animate(); return; }
+            if (keyHandler.downPressed) { direction = "down"; y += speed; animate(); return; }
         }
 
-        // movimento orizzontale
+        // MOVIMENTO ORIZZONTALE
         boolean moved = false;
         if (keyHandler.leftPressed) {
-            int newX = x - speed;
-            if (!isCollision(newX, y)) {
-                x = newX;
-            } 
-            direction = "left";
-            moved = true;
+            int nx = x - speed;
+            if (!isCollision(nx, y)) x = nx;
+            direction = "left"; moved = true;
         } else if (keyHandler.rightPressed) {
-            int newX = x + speed;
-            if (!isCollision(newX, y)) {
-                x = newX;
-            }
-            direction = "right";
-            moved = true;
+            int nx = x + speed;
+            if (!isCollision(nx, y)) x = nx;
+            direction = "right"; moved = true;
         }
-        if (moved) {
-            animate();
-        }
+        if (moved) animate();
 
-     // jump trigger
+        // JUMP
         if (keyHandler.spacePressed && onSolid && !jumping) {
             jumping = true;
             yVelocity = -jumpSpeed;
         }
-        
-     // salto/gravità
+
+        // GRAVITY
         if ((jumping || !onSolid) && !onLadder) {
             yVelocity += gravitySpeed;
-            int newY = y + yVelocity;
-            
-            if (yVelocity > 0 && isCollision(x, newY) && !onLadder) { // se cade sul pavimento
+            int ny = y + yVelocity;
+            if (yVelocity > 0 && isCollision(x, ny)) {
                 jumping = false;
                 yVelocity = 0;
-                y = ((newY + gp.tileSize) / gp.tileSize) * gp.tileSize - gp.tileSize; // snappa il player al suolo
+                y = ((ny + gp.tileSize)/gp.tileSize)*gp.tileSize - gp.tileSize;
             } else {
-                y = newY;
+                y = ny;
             }
         } else {
             yVelocity = 0;
         }
-        
-        // collisione con barile
+    }
+
+    private void handleBarrelCollision() {
+        if (invincible) return;
+        Rectangle playerRect = new Rectangle(x, y, gp.tileSize, gp.tileSize);
         for (Barrel b : gp.barrels) {
-            if (new Rectangle(x, y, gp.tileSize, gp.tileSize)
-                    .intersects(new Rectangle(b.worldX, b.worldY, gp.tileSize, gp.tileSize))) {
-                System.out.println("Mario colpito da un barile!");
-                // implementa logica: perdita vita, game over, etc.
+            Rectangle barrelRect = new Rectangle(b.worldX, b.worldY, gp.tileSize, gp.tileSize);
+            if (playerRect.intersects(barrelRect)) {
+                vite--;
+                invincible = true;
+                invincibleStartTime = System.currentTimeMillis();
+                if (vite <= 0) {
+                    gp.gameOver = true;
+                } else {
+                    gp.isHitAnim = true;
+                    gp.hitStartTime = System.currentTimeMillis();
+                }
+                break;
             }
         }
-
-
     }
+
 
 
     private void animate() {
@@ -145,7 +162,7 @@ public class Player extends Entity {
     private boolean isCollision(int nextX, int nextY) {
         int leftCol = nextX / gp.tileSize;
         int rightCol = (nextX + gp.tileSize - 1) / gp.tileSize;
-        int topRow = nextY / gp.tileSize;
+//        int topRow = nextY / gp.tileSize;
         int botRow = (nextY + gp.tileSize - 1) / gp.tileSize;
 
         return gp.tileM.isSolid(botRow, leftCol)
@@ -153,9 +170,13 @@ public class Player extends Entity {
     }
 
     public void draw(Graphics2D g2) {
-        BufferedImage image;
+    	BufferedImage image;
 
-        if (jumping) {
+    	if (gp.isHitAnim) {
+            int frameIndex = (int) ((System.currentTimeMillis() - gp.hitStartTime) / (gp.HIT_ANIMATION_DURATION / 5));
+            frameIndex = Math.min(frameIndex, 4); // evita IndexOutOfBounds
+            image = hitFrames[frameIndex];
+        } else if (jumping) {
             String jumpKey = direction.equals("right") ? "jumpR" : "jumpL";
             BufferedImage[] jumpFrames = spriteMap.get(jumpKey);
             image = (jumpFrames != null && jumpFrames.length > 0)
@@ -171,7 +192,7 @@ public class Player extends Entity {
 
     private void getPlayerImage() {
         try {
-            // up/down 7 frames (b1..b7)
+            // UP/DOWN
             BufferedImage[] up = new BufferedImage[7];
             for (int i = 0; i < 7; i++) {
                 up[i] = ImageIO.read(getClass().getResourceAsStream("/player/b" + (i+1) + ".png"));
@@ -179,27 +200,32 @@ public class Player extends Entity {
             spriteMap.put("up", up);
             spriteMap.put("down", up);
 
-            // right 4 frames (a1..a4)
+            // RIGHT
             BufferedImage[] right = new BufferedImage[4];
             for (int i = 0; i < 4; i++) {
-                right[i] = ImageIO.read(getClass().getResourceAsStream("/player/a" + (i+1) + ".png"));
+                right[i] = ImageIO.read(getClass().getResourceAsStream("/player/a" + (i + 1) + ".png"));
             }
             spriteMap.put("right", right);
 
-            // left 4 frames (m1..m4)
+            // LEFT
             BufferedImage[] left = new BufferedImage[4];
             for (int i = 0; i < 4; i++) {
-                left[i] = ImageIO.read(getClass().getResourceAsStream("/player/m" + (i+1) + ".png"));
+                left[i] = ImageIO.read(getClass().getResourceAsStream("/player/m" + (i + 1) + ".png"));
             }
             spriteMap.put("left", left);
             
+            // JUMP ANIMATION
             BufferedImage[] jumpR = new BufferedImage[1];
             jumpR[0] = ImageIO.read(getClass().getResourceAsStream("/player/c3.png"));
             spriteMap.put("jumpR", jumpR);
-
             BufferedImage[] jumpL = new BufferedImage[1];
             jumpL[0] = ImageIO.read(getClass().getResourceAsStream("/player/m3.png"));
             spriteMap.put("jumpL", jumpL);
+
+            // DEATH ANIMATION
+            for (int i = 0; i < 5; i++) {
+                hitFrames[i] = ImageIO.read(getClass().getResourceAsStream("/player/e" + (i + 1) + ".png"));
+            }
 
 
         } catch (IOException e) {

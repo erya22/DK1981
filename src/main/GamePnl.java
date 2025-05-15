@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -16,12 +17,11 @@ import object.Barrel;
 import object.SuperObject;
 import tile.TileManager;
 
-public class GamePnl extends JPanel implements Runnable{
-	//This works as a game screen: SCREEN SETTINGS
+public class GamePnl extends JPanel implements Runnable {
 	
+	// SCREEN SETTINGS
 	public static final int scaledTileSize = 32; //, it's a standard default dimension
 	public static final int scale = 1; //have to change it so that it adapts to the screen settings of the pc
-	
 	public final int tileSize = scaledTileSize * scale; //dimension of tiles on the screen
 	public final int maxScreenCol = 27;
 	public final int maxScreenRow = 27;
@@ -30,26 +30,33 @@ public class GamePnl extends JPanel implements Runnable{
 	
 	//FPS
 	public final int FPS = 60;
-	
 	public KeyHandler keyHandler = new KeyHandler();
-	
 	public Thread gameThread; //To help control time in game
 	
+	// GESTIONE ENTITA'
 	public Player player = new Player(this, keyHandler);
 	public DK dk = new DK(this);
 	public Pauline pauline = new Pauline(this);
 	
 	public TileManager tileM = new TileManager(this);
-	
 	public AssetSetter aSetter = new AssetSetter(this);
 	
+	// GESTIONE OGGETTI
 	public SuperObject obj[] = new SuperObject[10]; //we can display 10 objects at the same time.
-	
 	public List<Barrel> barrels = new ArrayList<>();
-
     public void addBarrel(Barrel b) {
         barrels.add(b);
     }
+    
+    // GAME OVER
+    public boolean gameOver = false;
+    public boolean isHitAnim = false;
+    public long hitStartTime = 0;
+    public final int HIT_ANIMATION_DURATION = 1500; 
+    // RESPAWN
+    private int playerStartX;
+    private int playerStartY;
+
     
 	public GamePnl() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -57,6 +64,10 @@ public class GamePnl extends JPanel implements Runnable{
 		this.setDoubleBuffered(true); //betters game rendering performance
 		this.addKeyListener(keyHandler);
 		this.setFocusable(true);
+		
+		// salva la posizione iniziale per il respawn
+        playerStartX = player.x;
+        playerStartY = player.y;
 	}
 	
 	public void setupGame() {
@@ -97,7 +108,6 @@ public class GamePnl extends JPanel implements Runnable{
 				nextDrawTime += drawInterval;
 				
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -105,14 +115,35 @@ public class GamePnl extends JPanel implements Runnable{
 	}
 	
 	public void update() {
-		
-		player.update();
-		dk.update();
-	
-		for (Barrel b : barrels) {
-            b.update(this);
-        }
+	    if (gameOver) return; // condizione game over, dev essere davanti a tutte le altre update
+
+	    // ANIMAZIONE HIT: FERMO GIOCO
+	    if (isHitAnim) {
+	        long elapsed = System.currentTimeMillis() - hitStartTime;
+	        if (elapsed >= HIT_ANIMATION_DURATION) {
+	            // respawn
+	            isHitAnim = false;
+
+	            // resetta player
+	            player.setDefaultValues();
+
+	            // resetta barili
+	            barrels.clear();
+
+	            // resetta DK
+	            dk.setDefaultValues(); 
+	        }
+	        return; // fermo tutto finché dura l’animazione
+	    }
+
+	    // GIOCO NORMALE
+	    player.update();
+	    dk.update();
+	    for (Barrel b : barrels) {
+	        b.update(this);
+	    }
 	}
+
 	
 	public void paintComponent(Graphics g) {
 		
@@ -136,16 +167,26 @@ public class GamePnl extends JPanel implements Runnable{
 		//DK
 		dk.draw(g2);
 		
-		//PLAYER
-		player.draw(g2);
-		
 		//BARRELS
 		for (Barrel b : barrels) {
             b.draw(g2, this);
         }
+				
+		//PLAYER
+		player.draw(g2);
+		
+		// GAME OVER
+		if (gameOver) {
+		    g.setColor(Color.RED);
+		    g.setFont(new Font("Arial", Font.BOLD, 48));
+		    String msg = "GAME OVER";
+		    int x = (getWidth() - g.getFontMetrics().stringWidth(msg)) / 2;
+		    int y = getHeight() / 2;
+		    g.drawString(msg, x, y);
+		}
 		
 		g2.dispose();
-		
+
 		
 	}
 }

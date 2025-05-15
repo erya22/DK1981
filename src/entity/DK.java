@@ -29,7 +29,7 @@ public class DK extends Entity {
         getPlayerImage();
     }
 
-    private void setDefaultValues() {
+    public void setDefaultValues() {
     	x = 80;
     	y = 128;
 		spriteCounter = 0;
