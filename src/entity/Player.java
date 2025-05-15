@@ -1,6 +1,7 @@
 package entity;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import main.GamePnl;
 import main.KeyHandler;
+import object.Barrel;
 
 /**
  * TODO: in case I need to create different animations, I can use GIMP or piskel.
@@ -76,7 +78,7 @@ public class Player extends Entity {
             int newX = x - speed;
             if (!isCollision(newX, y)) {
                 x = newX;
-            }
+            } 
             direction = "left";
             moved = true;
         } else if (keyHandler.rightPressed) {
@@ -91,12 +93,18 @@ public class Player extends Entity {
             animate();
         }
 
+     // jump trigger
+        if (keyHandler.spacePressed && onSolid && !jumping) {
+            jumping = true;
+            yVelocity = -jumpSpeed;
+        }
+        
      // salto/gravità
-        if (jumping || !onSolid) {
+        if ((jumping || !onSolid) && !onLadder) {
             yVelocity += gravitySpeed;
             int newY = y + yVelocity;
             
-            if (yVelocity > 0 && isCollision(x, newY)) { // se cade sul pavimento
+            if (yVelocity > 0 && isCollision(x, newY) && !onLadder) { // se cade sul pavimento
                 jumping = false;
                 yVelocity = 0;
                 y = ((newY + gp.tileSize) / gp.tileSize) * gp.tileSize - gp.tileSize; // snappa il player al suolo
@@ -106,12 +114,16 @@ public class Player extends Entity {
         } else {
             yVelocity = 0;
         }
-
-        // jump trigger
-        if (keyHandler.spacePressed && onSolid && !jumping) {
-            jumping = true;
-            yVelocity = -jumpSpeed;
+        
+        // collisione con barile
+        for (Barrel b : gp.barrels) {
+            if (new Rectangle(x, y, gp.tileSize, gp.tileSize)
+                    .intersects(new Rectangle(b.worldX, b.worldY, gp.tileSize, gp.tileSize))) {
+                System.out.println("Mario colpito da un barile!");
+                // implementa logica: perdita vita, game over, etc.
+            }
         }
+
 
     }
 
@@ -136,24 +148,25 @@ public class Player extends Entity {
         int topRow = nextY / gp.tileSize;
         int botRow = (nextY + gp.tileSize - 1) / gp.tileSize;
 
-        return gp.tileM.isSolid(topRow, leftCol)
-            || gp.tileM.isSolid(botRow, leftCol)
+        return gp.tileM.isSolid(botRow, leftCol)
             || gp.tileM.isSolid(botRow, rightCol);
     }
 
-    // l ha scritto chattie piu carino
     public void draw(Graphics2D g2) {
-    	BufferedImage image;
-    	if(jumping) {
-            BufferedImage[] jumpFrames = spriteMap.get("jump");
+        BufferedImage image;
+
+        if (jumping) {
+            String jumpKey = direction.equals("right") ? "jumpR" : "jumpL";
+            BufferedImage[] jumpFrames = spriteMap.get(jumpKey);
             image = (jumpFrames != null && jumpFrames.length > 0)
                     ? jumpFrames[0]
                     : spriteMap.get(direction)[0];  // backup sicuro
         } else {
-	        BufferedImage[] frames = spriteMap.get(direction);
-	        image = frames[(spriteNum - 1) % frames.length];
+            BufferedImage[] frames = spriteMap.get(direction);
+            image = frames[(spriteNum - 1) % frames.length];
         }
-	    g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
+
+        g2.drawImage(image, x, y, gp.tileSize, gp.tileSize, null);
     }
 
     private void getPlayerImage() {
@@ -180,11 +193,14 @@ public class Player extends Entity {
             }
             spriteMap.put("left", left);
             
-            BufferedImage[] jump = new BufferedImage[1];
-            jump[0] = ImageIO.read(
-                getClass().getResourceAsStream("/player/c1.png")
-            );
-            spriteMap.put("jump", jump);
+            BufferedImage[] jumpR = new BufferedImage[1];
+            jumpR[0] = ImageIO.read(getClass().getResourceAsStream("/player/c3.png"));
+            spriteMap.put("jumpR", jumpR);
+
+            BufferedImage[] jumpL = new BufferedImage[1];
+            jumpL[0] = ImageIO.read(getClass().getResourceAsStream("/player/m3.png"));
+            spriteMap.put("jumpL", jumpL);
+
 
         } catch (IOException e) {
             e.printStackTrace();

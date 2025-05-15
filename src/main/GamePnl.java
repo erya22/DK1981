@@ -4,10 +4,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
+import entity.DK;
+import entity.Pauline;
 import entity.Player;
+import object.Barrel;
 import object.SuperObject;
 import tile.TileManager;
 
@@ -31,6 +36,8 @@ public class GamePnl extends JPanel implements Runnable{
 	public Thread gameThread; //To help control time in game
 	
 	public Player player = new Player(this, keyHandler);
+	public DK dk = new DK(this);
+	public Pauline pauline = new Pauline(this);
 	
 	public TileManager tileM = new TileManager(this);
 	
@@ -38,6 +45,12 @@ public class GamePnl extends JPanel implements Runnable{
 	
 	public SuperObject obj[] = new SuperObject[10]; //we can display 10 objects at the same time.
 	
+	public List<Barrel> barrels = new ArrayList<>();
+
+    public void addBarrel(Barrel b) {
+        barrels.add(b);
+    }
+    
 	public GamePnl() {
 		this.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		this.setBackground(Color.black);
@@ -94,7 +107,11 @@ public class GamePnl extends JPanel implements Runnable{
 	public void update() {
 		
 		player.update();
+		dk.update();
 	
+		for (Barrel b : barrels) {
+            b.update(this);
+        }
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -113,8 +130,19 @@ public class GamePnl extends JPanel implements Runnable{
 			}
 		}
 		
+		//PAULINE
+		pauline.draw(g2);
+		
+		//DK
+		dk.draw(g2);
+		
 		//PLAYER
 		player.draw(g2);
+		
+		//BARRELS
+		for (Barrel b : barrels) {
+            b.draw(g2, this);
+        }
 		
 		g2.dispose();
 		
