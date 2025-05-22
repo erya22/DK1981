@@ -1,4 +1,5 @@
 package it.unibs.pajc.dkvsmario.view;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -25,6 +26,7 @@ public class MapPanel extends JPanel {
         int width = map.getWidth() * tileWidth;
         int height = map.getHeight() * tileHeight;
         setPreferredSize(new Dimension(width, height));
+        setBackground(Color.BLACK);
     }
 
     @Override
@@ -41,12 +43,12 @@ public class MapPanel extends JPanel {
 
         if (map == null || map.layers.isEmpty()) return;
 
-        Layer layer = map.layers.get(0); // disegniamo solo il primo layer
-        int[] data = layer.data;
+        Layer travi = map.layers.get(0); // disegniamo solo il primo layer
+        int[] dataTravi = travi.data;
 
-        for (int y = 0; y < layer.height; y++) {
-            for (int x = 0; x < layer.width; x++) {
-                int tileIndex = data[y * layer.width + x];
+        for (int y = 0; y < travi.height; y++) {
+            for (int x = 0; x < travi.width; x++) {
+                int tileIndex = dataTravi[y * travi.width + x];
                 if (tileIndex > 0) {
                 	 g2.drawImage(tiles[tileIndex - 1],
                              offsetX + x * tileWidth,
@@ -55,6 +57,22 @@ public class MapPanel extends JPanel {
                 }
             }
         }
+            
+        Layer scale = map.layers.get(1);
+        int[] dataScale = scale.data;
+        
+        for ( int y = 0; y < scale.height; y++) {
+                for (int x = 0; x < scale.width; x++) {
+                    int tileIndex = dataScale[y * scale.width + x];
+                    if (tileIndex > 0) {
+                    	 g2.drawImage(tiles[tileIndex - 1],
+                                 offsetX + x * tileWidth,
+                                 offsetY + y * tileHeight,
+                                 null);
+                    }
+                }
+            }
+            
     }
 
 	public TileMap getMap() {
