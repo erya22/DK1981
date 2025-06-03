@@ -5,23 +5,24 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Hammer {
+public class Hammer extends GameItem{
 	private String name;
-	private BufferedImage image;
+	public enum ObjState {INACTIVE, ACTIVE};
+	private BufferedImage[] images;
 	private int x, y;
+	private ObjState state;
 	
-	public Hammer(int x, int y) {
+	public Hammer(int x, int y, BufferedImage[] images) {
 		
-		this.x = x;
-		this.y = y;
-		
+		super(x, y, 32, 32, images);
+		this.state = ObjState.INACTIVE;
 		setDefaultValues();
 		getHammerImage();
 	}
 
 	private void getHammerImage() {
 		try {
-			image = ImageIO.read(getClass().getResourceAsStream("/hammer/f1.png"));
+			images[0] = ImageIO.read(getClass().getResourceAsStream("/hammer/f1.png"));
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
 			
@@ -38,14 +39,6 @@ public class Hammer {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public BufferedImage getImage() {
-		return image;
-	}
-
-	public void setImage(BufferedImage image) {
-		this.image = image;
 	}
 
 	public int getX() {

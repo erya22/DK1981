@@ -6,30 +6,27 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-public class Barrel {
+public class Barrel extends GameItem {
 	
 	//POSIZIONE
 	private int x, y;
 	
+	//SPEED
+	private int speed;
+	
 	//SPRITES
 	private HashMap<String, BufferedImage[]> spriteMap = new HashMap<String, BufferedImage[]>();
 	private String name;
+	
 	//STATO
 	private boolean collision = false;
 	
-	public Barrel() {
-		
-		setDefaultValues();
-		getBarrelImage();
-	}
+	public Barrel(int x, int y, BufferedImage[] sprite, int speed) {
+        super(x, y, 32, 32, sprite);
+        this.speed = speed;
+        getBarrelImage();
+    }
 
-	
-
-	private void setDefaultValues() {
-		name = "Barrel";
-		x = 0;
-		y = 0;
-	}
 	
 	private void getBarrelImage() {
 		BufferedImage[] frames = new BufferedImage[4];
@@ -103,6 +100,18 @@ public class Barrel {
 	public void setCollision(boolean collision) {
 		this.collision = collision;
 	}
+
+
+	public int getSpeed() {
+		return speed;
+	}
+
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+	
+	
 	
 	
 	
