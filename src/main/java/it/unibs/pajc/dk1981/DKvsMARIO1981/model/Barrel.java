@@ -12,28 +12,28 @@ public class Barrel extends GameItem {
 	private int x, y;
 	
 	//SPEED
-	private int speed;
+	private int speedX, speedY;
 	
 	//SPRITES
-	private HashMap<String, BufferedImage[]> spriteMap = new HashMap<String, BufferedImage[]>();
-	private String name;
+	private BufferedImage[] sprites = new BufferedImage[4];
+	private static final int FRAME_DELAY = 10;
+	
 	
 	//STATO
 	private boolean collision = false;
 	
-	public Barrel(int x, int y, BufferedImage[] sprite, int speed) {
+	public Barrel(int x, int y, BufferedImage[] sprite, int speedX, int speedY) {
         super(x, y, 32, 32, sprite);
-        this.speed = speed;
+        this.speedX = speedX;
+        this.speedY = speedY;
         getBarrelImage();
     }
 
 	
 	private void getBarrelImage() {
-		BufferedImage[] frames = new BufferedImage[4];
 		try {
             for (int i = 0; i < 4; i++) {
-                frames[i] = ImageIO.read(getClass().getResourceAsStream("/barrel/barrel" + (i + 1) + ".png"));
-                spriteMap.put(name, frames);
+                sprites[i] = ImageIO.read(getClass().getResourceAsStream("/barrel/barrel" + (i + 1) + ".png"));
             }
             
         } catch (IOException ioe) {
@@ -66,27 +66,33 @@ public class Barrel extends GameItem {
 	}
 
 
-
-	public HashMap<String, BufferedImage[]> getSpriteMap() {
-		return spriteMap;
+	public int getSpeedX() {
+		return speedX;
 	}
 
 
-
-	public void setSpriteMap(HashMap<String, BufferedImage[]> spriteMap) {
-		this.spriteMap = spriteMap;
+	public void setSpeedX(int speedX) {
+		this.speedX = speedX;
 	}
 
 
-
-	public String getName() {
-		return name;
+	public int getSpeedY() {
+		return speedY;
 	}
 
 
+	public void setSpeedY(int speedY) {
+		this.speedY = speedY;
+	}
 
-	public void setName(String name) {
-		this.name = name;
+
+	public BufferedImage[] getSprites() {
+		return sprites;
+	}
+
+
+	public void setSprites(BufferedImage[] sprites) {
+		this.sprites = sprites;
 	}
 
 
@@ -102,14 +108,12 @@ public class Barrel extends GameItem {
 	}
 
 
-	public int getSpeed() {
-		return speed;
+	public static int getFrameDelay() {
+		return FRAME_DELAY;
 	}
 
 
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
+
 	
 	
 	

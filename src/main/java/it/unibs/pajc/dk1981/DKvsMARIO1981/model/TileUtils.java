@@ -1,4 +1,4 @@
-package it.unibs.pajc.dk1981.DKvsMARIO1981.pojo;
+package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 import java.awt.image.BufferedImage;
 
 public class TileUtils {

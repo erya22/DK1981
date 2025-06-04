@@ -3,17 +3,15 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.unibs.pajc.dk1981.DKvsMARIO1981.pojo.Layer;
-
 public class GameMap {
 	public static final int WIDTH = 28;
 	public static final int HEIGHT = 32;
 	
-	private Layer[][] ladders;
-	private Layer[][] platform;
+	private Layer ladders;
+	private Layer platform;
 	private List<GameItem> items = new ArrayList<GameItem>();
 	
-	private Pauline pauline = new Pauline();
+	private Pauline pauline = new Pauline(0, 0);
 	private DK DK;
 	
 	private Player player;
@@ -24,19 +22,19 @@ public class GameMap {
 		//AGGIUNGI MAPPA
 	}
 
-	public Layer[][] getLadders() {
+	public Layer getLadders() {
 		return ladders;
 	}
 
-	public void setLadders(Layer[][] ladders) {
+	public void setLadders(Layer ladders) {
 		this.ladders = ladders;
 	}
 
-	public Layer[][] getPlatform() {
+	public Layer getPlatform() {
 		return platform;
 	}
 
-	public void setPlatform(Layer[][] platform) {
+	public void setPlatform(Layer platform) {
 		this.platform = platform;
 	}
 

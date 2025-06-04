@@ -6,12 +6,8 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-public class Player {
+public class Player extends Entity{
 
-	//POSITION
-	private int x, y;
-	private int speed;
-	
 	//GRAVITY/SPEED
 	private int jumpSpeed;
 	private int gravitySpeed;
@@ -24,33 +20,25 @@ public class Player {
 	//GESTIONE VITE
 	private int vite = 3;
 	private long invincibleTime = 0;
-	private final int IMMUNITY = 2000;
+	private static final int IMMUNITY = 2000;
 	
-	//SPRITES
-	private HashMap<String, BufferedImage[]> spriteMap = new HashMap<>();
-	String direction = "right";
-	private int spriteCounter = 0;
-	private int spriteNum = 1;
+
 	
-	public Player() {
-		
+	public Player(int x, int y) {
+		super(x, y);
 		setDefaultValues();
-		getPlayerImage();
+		getEntityImage();
 	}
-	
+
 	public void setDefaultValues() {
 		x = 0;
 		y = 0;
-		speed = 4;
-		direction = "right";
-		spriteCounter = 1;
-		spriteNum = 1;
 		yVelocity = 0;
 		jumpSpeed = 12;
 		gravitySpeed = 1;
 	}
 	
-	private void getPlayerImage() {
+	public void getEntityImage() {
         try {
             // UP/DOWN
             BufferedImage[] up = new BufferedImage[7];
@@ -93,30 +81,6 @@ public class Player {
             e.printStackTrace();
         }
     }
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
 
 	public int getJumpSpeed() {
 		return jumpSpeed;
@@ -174,42 +138,11 @@ public class Player {
 		this.invincibleTime = invincibleTime;
 	}
 
-	public HashMap<String, BufferedImage[]> getSpriteMap() {
-		return spriteMap;
-	}
-
-	public void setSpriteMap(HashMap<String, BufferedImage[]> spriteMap) {
-		this.spriteMap = spriteMap;
-	}
-
-	public String getDirection() {
-		return direction;
-	}
-
-	public void setDirection(String direction) {
-		this.direction = direction;
-	}
-
-	public int getSpriteCounter() {
-		return spriteCounter;
-	}
-
-	public void setSpriteCounter(int spriteCounter) {
-		this.spriteCounter = spriteCounter;
-	}
-
-	public int getSpriteNum() {
-		return spriteNum;
-	}
-
-	public void setSpriteNum(int spriteNum) {
-		this.spriteNum = spriteNum;
-	}
-
-	public int getIMMUNITY() {
+	public static int getImmunity() {
 		return IMMUNITY;
 	}
-	
+
+
 	
 
 }

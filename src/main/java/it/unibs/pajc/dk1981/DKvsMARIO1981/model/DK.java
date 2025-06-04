@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-public class DK {
+public class DK extends Entity {
 	//POSIZIONE
 	private int x, y;
 	
@@ -27,12 +27,12 @@ public class DK {
 	private final int ACTION_DURATION = 60;
 	private String currentAction;
 	
-	public DK() {
-		
+	public DK(int x, int y) {
+		super(x, y);
 		setDefaultValues();
-		getDKImage();
+		getEntityImage();
 	}
-	
+
 	public void setDefaultValues() {
 		x = 0;
 		y = 0;
@@ -43,7 +43,7 @@ public class DK {
 		actionTimer = 0;
 	}
 	
-	public void getDKImage() {
+	public void getEntityImage() {
 		try {
             // dx/sx prendi barili
             BufferedImage[] dx = new BufferedImage[1];
