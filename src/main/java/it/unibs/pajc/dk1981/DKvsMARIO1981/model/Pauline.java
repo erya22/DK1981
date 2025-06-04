@@ -17,12 +17,13 @@ public class Pauline extends Entity{
 	public void setDefaultValues() {
 			spriteCounter = 0;
 			spriteNum = 1;
+			spriteMap = new HashMap<>();
 	 }
 	 
 	 public void getEntityImage() {
 	        try {
 	            BufferedImage[] rest = new BufferedImage[1];
-	            rest[0] = ImageIO.read(getClass().getResourceAsStream("/background/27peach.png"));
+	            rest[0] = ImageIO.read(getClass().getResourceAsStream("/NPCS/27peach.png"));
 	            spriteMap.put("rest", rest);
 
 

@@ -17,12 +17,12 @@ public class Hammer extends GameItem{
 		super(x, y, 32, 32, images);
 		this.state = ObjState.INACTIVE;
 		setDefaultValues();
-		getHammerImage();
+		getItemImage();
 	}
 
-	private void getHammerImage() {
+	public void getItemImage() {
 		try {
-			images[0] = ImageIO.read(getClass().getResourceAsStream("/hammer/f1.png"));
+			images[0] = ImageIO.read(getClass().getResourceAsStream("/OBJECTS/f1.png"));
 		} catch(IOException ioe) {
 			ioe.printStackTrace();
 			

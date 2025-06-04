@@ -41,24 +41,25 @@ public class DK extends Entity {
 		actionIndex = 0;
 		currentAction = actionCycle[actionIndex]; 
 		actionTimer = 0;
+		spriteMap = new HashMap<>();
 	}
 	
 	public void getEntityImage() {
 		try {
             // dx/sx prendi barili
             BufferedImage[] dx = new BufferedImage[1];
-            dx[0] = ImageIO.read(getClass().getResourceAsStream("/DK/h6.png"));
+            dx[0] = ImageIO.read(getClass().getResourceAsStream("/NPCS/h6.png"));
             spriteMap.put("dx", dx);
             BufferedImage[] sx = new BufferedImage[1];
-            sx[0] = ImageIO.read(getClass().getResourceAsStream("/DK/h4.png"));
+            sx[0] = ImageIO.read(getClass().getResourceAsStream("/NPCS/h4.png"));
             spriteMap.put("sx", sx);
 
             // urlo selvaggio
             BufferedImage[] rest = new BufferedImage[1];
-            rest[0] = ImageIO.read(getClass().getResourceAsStream("/DK/h1.png"));
+            rest[0] = ImageIO.read(getClass().getResourceAsStream("/NPCS/h1.png"));
             spriteMap.put("rest", rest);
             BufferedImage[] urlo = new BufferedImage[1];
-            urlo[0] = ImageIO.read(getClass().getResourceAsStream("/DK/h3.png"));
+            urlo[0] = ImageIO.read(getClass().getResourceAsStream("/NPCS/h3.png"));
             spriteMap.put("urlo", urlo);
 
 

@@ -2,13 +2,13 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 import java.util.List;
 
 public class TileMap {
-    public int width;
-    public int height;
-    public int tilewidth;
-    public int tileheight;
-    public boolean infinite;
-    public int compressionlevel;
-    public List<Layer> layers;
+    private int width;
+    private int height;
+    private int tilewidth;
+    private int tileheight;
+    private boolean infinite;
+    private int compressionlevel;
+    private List<Layer> layers;
     
     public TileMap() {
     	

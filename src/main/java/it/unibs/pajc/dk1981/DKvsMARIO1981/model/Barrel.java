@@ -8,14 +8,12 @@ import javax.imageio.ImageIO;
 
 public class Barrel extends GameItem {
 	
-	//POSIZIONE
-	private int x, y;
+
 	
 	//SPEED
 	private int speedX, speedY;
 	
 	//SPRITES
-	private BufferedImage[] sprites = new BufferedImage[4];
 	private static final int FRAME_DELAY = 10;
 	
 	
@@ -26,14 +24,14 @@ public class Barrel extends GameItem {
         super(x, y, 32, 32, sprite);
         this.speedX = speedX;
         this.speedY = speedY;
-        getBarrelImage();
+        getItemImage();
     }
 
 	
-	private void getBarrelImage() {
+	public void getItemImage() {
 		try {
             for (int i = 0; i < 4; i++) {
-                sprites[i] = ImageIO.read(getClass().getResourceAsStream("/barrel/barrel" + (i + 1) + ".png"));
+                sprite[i] = ImageIO.read(getClass().getResourceAsStream("/OBJECTS/barrel" + (i + 1) + ".png"));
             }
             
         } catch (IOException ioe) {
@@ -41,29 +39,6 @@ public class Barrel extends GameItem {
         }
 	}
 
-
-
-	public int getX() {
-		return x;
-	}
-
-
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-
-
-	public int getY() {
-		return y;
-	}
-
-
-
-	public void setY(int y) {
-		this.y = y;
-	}
 
 
 	public int getSpeedX() {
@@ -83,16 +58,6 @@ public class Barrel extends GameItem {
 
 	public void setSpeedY(int speedY) {
 		this.speedY = speedY;
-	}
-
-
-	public BufferedImage[] getSprites() {
-		return sprites;
-	}
-
-
-	public void setSprites(BufferedImage[] sprites) {
-		this.sprites = sprites;
 	}
 
 

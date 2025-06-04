@@ -1,14 +1,22 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameMap {
-	public static final int WIDTH = 28;
-	public static final int HEIGHT = 32;
+	//SCREEN SETTINGS
+	private final int TILECOL = 28;
+	private final int TILE_ROWS = 32;
 	
-	private Layer ladders;
-	private Layer platform;
+	private int tileSize = 32;
+	
+	//ARCHIVIO IMMAGINI MAPPA
+	private TileMap map;
+	private BufferedImage tileset;
+	private BufferedImage[] tiles;
+	
+	//ARCHIVIO OGGETTI
 	private List<GameItem> items = new ArrayList<GameItem>();
 	
 	private Pauline pauline = new Pauline(0, 0);
@@ -19,24 +27,31 @@ public class GameMap {
 	public GameMap(Player player) {
 		super();
 		this.player = player;
-		//AGGIUNGI MAPPA
+		
+		
+		map = TileMapLoader.loadMap();
+		tileset = TileMapLoader.loadTileset();
+		tiles = TileUtils.loadTiles(tileset, map.getTilewidth(), map.getTileheight(), 16);
+		
+		
 	}
 
-	public Layer getLadders() {
-		return ladders;
+	
+	
+	
+	public TileMap getMap() {
+		return map;
 	}
 
-	public void setLadders(Layer ladders) {
-		this.ladders = ladders;
+
+
+
+	public void setMap(TileMap map) {
+		this.map = map;
 	}
 
-	public Layer getPlatform() {
-		return platform;
-	}
 
-	public void setPlatform(Layer platform) {
-		this.platform = platform;
-	}
+
 
 	public List<GameItem> getItems() {
 		return items;
@@ -70,14 +85,62 @@ public class GameMap {
 		this.player = player;
 	}
 
-	public static int getWidth() {
-		return WIDTH;
+
+
+
+	public int getTileSize() {
+		return tileSize;
 	}
 
-	public static int getHeight() {
-		return HEIGHT;
-	}
+
 	
+
+	public void setTileSize(int tileSize) {
+		this.tileSize = tileSize;
+	}
+
+
+
+
+	public BufferedImage getTileset() {
+		return tileset;
+	}
+
+
+
+
+	public void setTileset(BufferedImage tileset) {
+		this.tileset = tileset;
+	}
+
+
+
+
+	public BufferedImage[] getTiles() {
+		return tiles;
+	}
+
+
+
+
+	public void setTiles(BufferedImage[] tiles) {
+		this.tiles = tiles;
+	}
+
+
+
+
+	public int getTilecol() {
+		return TILECOL;
+	}
+
+
+
+
+	public int getTileRows() {
+		return TILE_ROWS;
+	}
+
 	
 	
 	

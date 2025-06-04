@@ -1,16 +1,19 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 import java.awt.image.BufferedImage;
 
-public class TileUtils {
-    public static BufferedImage[] loadTiles(BufferedImage tileset, int tileWidth, int tileHeight) {
-        int columns = tileset.getWidth() / tileWidth;
-        int rows = tileset.getHeight() / tileHeight;
-        BufferedImage[] tiles = new BufferedImage[columns * rows];
+import org.imgscalr.Scalr;
 
-        for (int y = 0; y < rows; y++) {
-            for (int x = 0; x < columns; x++) {
-                int index = y * columns + x;
-                tiles[index] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+public class TileUtils {
+    public static BufferedImage[] loadTiles(BufferedImage tileset, int tileWidth, int tileHeight, int scaledTileSize) {
+        int tilePerRow = tileset.getWidth() / tileWidth;
+        int tilePerCol = tileset.getHeight() / tileHeight;
+        BufferedImage[] tiles = new BufferedImage[tilePerRow * tilePerCol];
+
+        for (int y = 0; y < tilePerCol; y++) {
+            for (int x = 0; x < tilePerRow; x++) {
+                int index = y * tilePerRow + x;
+                BufferedImage tile = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                tiles[index] = Scalr.resize(tile, scaledTileSize);
             }
         }
         return tiles;
