@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameMap {
+public class Universe {
 	//SCREEN SETTINGS
 	private final int TILECOL = 28;
 	private final int TILE_ROWS = 32;
@@ -19,14 +19,14 @@ public class GameMap {
 	//ARCHIVIO OGGETTI
 	private List<GameItem> items = new ArrayList<GameItem>();
 	
-	private Pauline pauline = new Pauline(0, 0);
+	private Pauline pauline = new Pauline(this);
 	private DK DK;
 	
 	private Player player;
 
-	public GameMap(Player player) {
+	public Universe() {
 		super();
-		this.player = player;
+		this.player = new Player(this);
 		
 		
 		map = TileMapLoader.loadMap();

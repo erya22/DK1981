@@ -12,10 +12,9 @@ public class Hammer extends GameItem{
 	private int x, y;
 	private ObjState state;
 	
-	public Hammer(int x, int y, BufferedImage[] images) {
+	public Hammer(Universe universe) {
 		
-		super(x, y, 32, 32, images);
-		this.state = ObjState.INACTIVE;
+		super(universe);
 		setDefaultValues();
 		getItemImage();
 	}
@@ -29,8 +28,9 @@ public class Hammer extends GameItem{
 		}
 	}
 
-	private void setDefaultValues() {
+	public void setDefaultValues() {
 		name = "Hammer";
+		this.setState(ObjState.INACTIVE);
 	}
 
 	public String getName() {
@@ -55,6 +55,14 @@ public class Hammer extends GameItem{
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public ObjState getState() {
+		return state;
+	}
+
+	public void setState(ObjState state) {
+		this.state = state;
 	}
 	
 	

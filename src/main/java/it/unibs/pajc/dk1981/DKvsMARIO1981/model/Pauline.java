@@ -8,8 +8,8 @@ import javax.imageio.ImageIO;
 
 public class Pauline extends Entity{
 	 
-	 public Pauline(int x, int y) {
-		super(x, y);
+	 public Pauline(Universe universe) {
+		super(universe);
 		setDefaultValues();
 		getEntityImage();
 	}

@@ -12,11 +12,12 @@ public abstract class Entity {
 	protected int spriteCounter;
 	protected int spriteNum = 1;
 	protected HashMap<String, BufferedImage[]> spriteMap;
+	protected int tileSize;
+	protected Universe universe;
 	
-	public Entity(int x, int y) {
+	public Entity(Universe universe) {
 		super();
-		this.x = x;
-		this.y = y;
+		this.universe = universe;
 	}
 	
 	public abstract void getEntityImage();
@@ -84,6 +85,15 @@ public abstract class Entity {
 	public void setSpriteMap(HashMap<String, BufferedImage[]> spriteMap) {
 		this.spriteMap = spriteMap;
 	}
+
+	public int getTileSize() {
+		return tileSize;
+	}
+
+	public void setTileSize(int tileSize) {
+		this.tileSize = tileSize;
+	}
+	
 	
 	
 

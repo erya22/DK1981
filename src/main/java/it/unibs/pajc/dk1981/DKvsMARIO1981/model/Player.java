@@ -22,10 +22,17 @@ public class Player extends Entity{
 	private long invincibleTime = 0;
 	private static final int IMMUNITY = 2000;
 	
+	private int tileSize = 32;
+	private long hitStartTime = 0;
+	private final long HIT_DURATION = 1500;
+	
+	private Universe universe;
+	
+	
 
 	
-	public Player(int x, int y) {
-		super(x, y);
+	public Player(Universe universe) {
+		super(universe);
 		setDefaultValues();
 		getEntityImage();
 	}
@@ -144,7 +151,28 @@ public class Player extends Entity{
 		return IMMUNITY;
 	}
 
+	public int getTileSize() {
+		return tileSize;
+	}
 
+	public void setTileSize(int tileSize) {
+		this.tileSize = tileSize;
+	}
+
+	public long getHitStartTime() {
+		return hitStartTime;
+	}
+
+	public void setHitStartTime(long hitStartTime) {
+		this.hitStartTime = hitStartTime;
+	}
+
+	public long getHitDuration() {
+		return HIT_DURATION;
+	}
+
+	
+	
 	
 
 }

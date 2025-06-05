@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import it.unibs.pajc.dk1981.DKvsMARIO1981.controller.GameEngine;
-import it.unibs.pajc.dk1981.DKvsMARIO1981.model.GameMap;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.TileMapLoader;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.view.MapRenderer;
 
@@ -21,7 +21,7 @@ public class DKvsMario extends JPanel implements Runnable {
 
 	
 	private GameEngine engine = new GameEngine();
-	private GameMap gameMap = engine.getUniverse();
+	private Universe gameMap = engine.getUniverse();
 
     private BufferedImage screen;
     private MapRenderer renderer;

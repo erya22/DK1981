@@ -20,12 +20,15 @@ public class Barrel extends GameItem {
 	//STATO
 	private boolean collision = false;
 	
-	public Barrel(int x, int y, BufferedImage[] sprite, int speedX, int speedY) {
-        super(x, y, 32, 32, sprite);
-        this.speedX = speedX;
-        this.speedY = speedY;
+	public Barrel(Universe universe) {
+        super(universe);
+        setDefaultValues();
         getItemImage();
     }
+	
+	public void setDefaultValues() {
+		
+	}
 
 	
 	public void getItemImage() {

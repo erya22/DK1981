@@ -5,24 +5,25 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import it.unibs.pajc.dk1981.DKvsMARIO1981.model.GameMap;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
 
 public class GameEngine implements KeyListener {
 	Player mario;
-	GameMap universe = new GameMap(mario);
+	Universe universe;
 
 	public GameEngine() {
-		 mario = new Player(0, 0);
+		universe = new Universe();
+		mario = new Player(universe);
 		 
 		 // position droid in the middle
-		 mario.setX(universe.getTilecol() / 2);
-		 mario.setY(universe.getTileRows() / 2);
+		mario.setX(universe.getTilecol() / 2);
+		mario.setY(universe.getTileRows() / 2);
 		 
 		 //add the npcs
 		 
 		 
-		 universe = new GameMap(mario);
+		 
 		}
 	
 	@Override
@@ -83,11 +84,11 @@ public class GameEngine implements KeyListener {
 		this.mario = mario;
 	}
 
-	public GameMap getUniverse() {
+	public Universe getUniverse() {
 		return universe;
 	}
 
-	public void setUniverse(GameMap universe) {
+	public void setUniverse(Universe universe) {
 		this.universe = universe;
 	}
 

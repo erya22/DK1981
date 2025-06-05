@@ -27,8 +27,9 @@ public class DK extends Entity {
 	private final int ACTION_DURATION = 60;
 	private String currentAction;
 	
-	public DK(int x, int y) {
-		super(x, y);
+	
+	public DK(Universe universe) {
+		super(universe);
 		setDefaultValues();
 		getEntityImage();
 	}

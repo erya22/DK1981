@@ -7,16 +7,14 @@ public abstract class GameItem {
     protected int x, y;
     protected int width, height;
     protected BufferedImage[] sprite;
+    protected Universe universe;
 
-    public GameItem(int x, int y, int width, int height, BufferedImage[] sprite) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.sprite = sprite;
+    public GameItem(Universe universe) {
+        this.universe = universe;
     }
     
     public abstract void getItemImage();
+    public abstract void setDefaultValues();
 
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
