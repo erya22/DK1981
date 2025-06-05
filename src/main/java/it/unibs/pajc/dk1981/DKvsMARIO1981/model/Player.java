@@ -46,6 +46,7 @@ public class Player extends Entity{
 		spriteMap = new HashMap<>();
 	}
 	
+	
 	public void getEntityImage() {
         try {
         	
@@ -169,6 +170,32 @@ public class Player extends Entity{
 
 	public long getHitDuration() {
 		return HIT_DURATION;
+	}
+
+	public void climb(String direction) {
+		if (this.getMovement() == MovementState.CLIMBING) {
+			if (direction.equals("up")) { y -= speedY; return; }
+            if (direction.equals("down")) { y += speedY;  return; }
+		}
+		
+	}
+
+	public void walk(String direction) {
+		if (direction.equals("left")) {
+            int nx = x - speedX;
+            setMovement(MovementState.WALKING);
+        } else if (direction.equals("right")) {
+            int nx = x + speedX;
+            setMovement(MovementState.WALKING);
+        }
+		
+	}
+
+	public void jump(String direction) {
+		 if (direction.equals("jump") && this.movement != MovementState.JUMPING) {
+	            setMovement(MovementState.JUMPING);
+	            yVelocity = -jumpSpeed;
+	        }
 	}
 
 	
