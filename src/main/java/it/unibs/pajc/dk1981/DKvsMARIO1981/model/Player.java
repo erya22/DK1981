@@ -6,6 +6,8 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GameWindow;
+
 public class Player extends Entity{
 
 	//GRAVITY/SPEED
@@ -32,24 +34,25 @@ public class Player extends Entity{
 
 	
 	public Player(Universe universe) {
-		super(universe);
+		super(universe, "Mario");
 		setDefaultValues();
 		getEntityImage();
 	}
 
 	public void setDefaultValues() {
-		x = 0;
-		y = 0;
+		this.setX(24 * 3); 
+		this.setY(24 * 30 - 8);
 		yVelocity = 0;
 		jumpSpeed = 12;
-		speedX = 4;
-		speedY = 4;
+		this.setSpeedX(4);
+		this.setSpeedY(4);
 		gravitySpeed = 1;
-		spriteMap = new HashMap<>();
+		this.setSpriteMap(new HashMap<>());
 	}
 	
 	
 	public void getEntityImage() {
+		HashMap<String, BufferedImage[]> spriteMap = this.getSpriteMap();
         try {
         	
             // UP/DOWN
@@ -178,11 +181,9 @@ public class Player extends Entity{
 
 	public void climb(String direction) {
 		if (this.getMovement() == MovementState.UPCLIMB ) {
-			 this.y -= speedY; 
-			 return;
+			this.addY(-this.getSpeedY());
 		} else {
-            this.y += speedY;  
-            return; 
+         this.addY(this.getSpeedY());
 		}
 		
 	}
@@ -190,9 +191,9 @@ public class Player extends Entity{
 	public void walk(String direction) {
 		setMovement(MovementState.WALKING);
 		if (direction.equals("left")) {
-            this.x -= speedX;
+            this.addX(-this.getSpeedX());
         } else if (direction.equals("right")) {
-            this.x += speedX;
+            this.addX(this.getSpeedX());
         }
 		
 	}

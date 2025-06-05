@@ -52,7 +52,7 @@ public class GameApp {
 			e.printStackTrace();
 		}
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		frame.setResizable(true);
 		
 		Timer resizeTimer = new Timer(200, e -> {
 		    Dimension size = frame.getContentPane().getSize(); // dimensioni effettive dell'area disponibile

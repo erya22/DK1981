@@ -11,9 +11,9 @@ import it.unibs.pajc.dk1981.DKvsMARIO1981.DKvsMario;
 
 public class GameWindow extends JFrame {
 
-    private static final int MAP_WIDTH_TILES = 28;
-    private static final int MAP_HEIGHT_TILES = 32;
-    private static final double ASPECT_RATIO = (double) MAP_WIDTH_TILES / MAP_HEIGHT_TILES;
+    public static final int MAP_WIDTH_TILES = 28;
+    public static final int MAP_HEIGHT_TILES = 32;
+    public static final double ASPECT_RATIO = (double) MAP_WIDTH_TILES / MAP_HEIGHT_TILES;
 
     private DKvsMario gamePanel;
 
@@ -23,6 +23,11 @@ public class GameWindow extends JFrame {
         gamePanel = new DKvsMario();
 
         add(gamePanel);
+
+        int initialTileSize = getContentPane().getWidth() / MAP_WIDTH_TILES;
+        gamePanel.updateSize(initialTileSize);
+
+        System.err.println("Dimensione iniziale delle tile: " + initialTileSize);
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

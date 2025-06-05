@@ -22,7 +22,7 @@ public class DKvsMario extends JPanel implements Runnable {
 
 	
 	private GameEngine engine = new GameEngine();
-	private Universe gameMap = engine.getUniverse();
+	private Universe universe = engine.getUniverse();
 
     private BufferedImage screen;
     private MapRenderer renderer;
@@ -41,7 +41,7 @@ public class DKvsMario extends JPanel implements Runnable {
 
         // Inizializza mappa e renderer
         BufferedImage tileset = TileMapLoader.loadTileset();
-        renderer = new MapRenderer(tileset, gameMap.getMap().getTilewidth(), gameMap.getMap().getTileheight(), tileSize);
+        renderer = new MapRenderer(tileset, universe.getMap().getTilewidth(), universe.getMap().getTileheight(), tileSize);
 
         int screenW = tileSize * MAP_WIDTH_TILES;
         int screenH = tileSize * MAP_HEIGHT_TILES;
@@ -49,8 +49,8 @@ public class DKvsMario extends JPanel implements Runnable {
         setPreferredSize(new Dimension(screenW, screenH));
 
         // 🔽 Inizializza il player
-        this.player = new Player(gameMap);
-        gameMap.setPlayer(player); // <- Associa il player all'universo, se hai un metodo del genere
+        this.player = new Player(universe);
+        universe.setPlayer(player); // <- Associa il player all'universo, se hai un metodo del genere
 
         // 🔽 Inizializza il controller con player e universo
         this.controller = engine.getController();
@@ -66,6 +66,7 @@ public class DKvsMario extends JPanel implements Runnable {
      */
     public void updateSize(int tileSize) {
     	this.tileSize = tileSize;
+    	 System.out.println("Dimensione attuale della tile: " + tileSize);
         int screenW = tileSize * MAP_WIDTH_TILES;
         int screenH = tileSize * MAP_HEIGHT_TILES;
         screen = new BufferedImage(screenW, screenH, BufferedImage.TYPE_INT_RGB);

@@ -18,10 +18,6 @@ public class GameEngine {
 		mario = new Player(universe);
 		universe.setPlayer(mario); // Assicurati che Universe abbia questo metodo
 
-		// Posiziona Mario nella mappa
-		mario.setX(universe.getTilecol() / 2);
-		mario.setY(universe.getTileRows() / 2);
-
 		// Inizializza controller e vista
 		controller = new PlayerController(mario, universe);
 		playerView = new PlayerView(mario);
