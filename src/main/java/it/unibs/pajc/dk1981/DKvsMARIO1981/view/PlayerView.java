@@ -36,22 +36,25 @@ public class PlayerView {
         }
 
         g2.drawImage(image, model.getX(), model.getY(), model.getTileSize(), model.getTileSize(), null);
+        animate();
 	}
 	
 	 private void animate() {
 		 int spriteCounter = model.getSpriteCounter() + 1;
-		 int spriteNum = model.getSpriteNum();
-		 
-	        model.setSpriteCounter(spriteCounter);
-	        if (spriteCounter > 10) {
-	            spriteNum++;
-	            BufferedImage[] frames = model.getSpriteMap().get(model.getDirection());
-	            int maxFrame = frames != null ? frames.length : 1;
-	            if (spriteNum > maxFrame) {
-	                spriteNum = 1;
-	            }
-	            spriteCounter = 0;
-	        }
-	    }
+		    int spriteNum = model.getSpriteNum();
+
+		    model.setSpriteCounter(spriteCounter);
+
+		    if (spriteCounter > 10) {
+		        spriteNum++;
+		        BufferedImage[] frames = model.getSpriteMap().get(model.getDirection());
+		        int maxFrame = frames != null ? frames.length : 1;
+		        if (spriteNum > maxFrame) {
+		            spriteNum = 1;
+		        }
+		        model.setSpriteNum(spriteNum); // <- salva il nuovo frame
+		        model.setSpriteCounter(0);     // <- resetta il contatore
+		    }	    
+	 }
 
 }

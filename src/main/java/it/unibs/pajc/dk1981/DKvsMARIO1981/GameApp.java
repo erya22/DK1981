@@ -5,7 +5,9 @@ import java.awt.EventQueue;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
@@ -43,8 +45,14 @@ public class GameApp {
 
 		DKvsMario gamePanel = new DKvsMario();
 		frame = new JFrame("DK VS MARIO ARCADE VERSION 1981");
+		try {
+			frame.setIconImage(ImageIO.read(getClass().getResource("/PLAYER/a1.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(true);
+		frame.setResizable(false);
 		
 		Timer resizeTimer = new Timer(200, e -> {
 		    Dimension size = frame.getContentPane().getSize(); // dimensioni effettive dell'area disponibile
@@ -60,6 +68,8 @@ public class GameApp {
 
 		    frame.getContentPane().setPreferredSize(new Dimension(mapWidth, mapHeight));
 		    frame.pack(); // forza il ridimensionamento del frame
+		    
+		    gamePanel.repaint();
 		});
 		resizeTimer.setRepeats(false);
 		
