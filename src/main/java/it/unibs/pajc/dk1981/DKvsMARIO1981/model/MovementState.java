@@ -5,6 +5,8 @@ public enum MovementState {
 	WALKING,
 	JUMPING,
 	FALLING,
-	CLIMBING
+	UPCLIMB,
+	DOWNCLIMB
+	
 
 }

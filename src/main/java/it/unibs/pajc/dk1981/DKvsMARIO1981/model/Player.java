@@ -20,7 +20,7 @@ public class Player extends Entity{
 	//GESTIONE VITE
 	private int vite = 3;
 	private long invincibleTime = 0;
-	private static final int IMMUNITY = 2000;
+	private final int IMMUNITY = 2000;
 	
 	private int tileSize = 32;
 	private long hitStartTime = 0;
@@ -152,7 +152,7 @@ public class Player extends Entity{
 		this.invincibleTime = invincibleTime;
 	}
 
-	public static int getImmunity() {
+	public int getImmunity() {
 		return IMMUNITY;
 	}
 
@@ -177,9 +177,12 @@ public class Player extends Entity{
 	}
 
 	public void climb(String direction) {
-		if (this.getMovement() == MovementState.CLIMBING) {
-			if (direction.equals("up")) { this.y -= speedY; return; }
-            if (direction.equals("down")) { this.y += speedY;  return; }
+		if (this.getMovement() == MovementState.UPCLIMB ) {
+			 this.y -= speedY; 
+			 return;
+		} else {
+            this.y += speedY;  
+            return; 
 		}
 		
 	}
@@ -195,10 +198,8 @@ public class Player extends Entity{
 	}
 
 	public void jump() {
-		 if (direction.equals("jump") && this.movement != MovementState.JUMPING) {
 	            setMovement(MovementState.JUMPING);
 	            this.yVelocity = -jumpSpeed;
-	        }
 	}
 
 	

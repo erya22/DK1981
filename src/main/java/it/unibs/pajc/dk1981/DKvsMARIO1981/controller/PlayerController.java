@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.MovementState;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.State;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.view.PlayerView;
 
@@ -42,6 +43,21 @@ public class PlayerController implements KeyListener {
     }
     
     public void update(float deltaTime) {
+    	if (player.getState() == State.DEAD || player.getState() == State.HIT) return;
+    	
+    	if (player.getState() == State.INVINCIBLE) {
+            long elapsed = System.currentTimeMillis() - player.getInvincibleTime();
+            if (elapsed >= player.getImmunity()) {
+                player.setState(State.ALIVE); 
+            }
+    	}
+    }
+    
+    private void handleMovement() {
+    	
+    }
+    
+    private void handleBarrelCollision() {
     	
     }
 

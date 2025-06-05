@@ -30,6 +30,12 @@ public class PlayerView {
             image = (jumpFrames != null && jumpFrames.length > 0)
                     ? jumpFrames[0]
                     : model.getSpriteMap().get(model.getDirection())[0];  // backup sicuro
+        } else if (model.getMovement() == MovementState.IDLE) {
+        	BufferedImage[] frames = model.getSpriteMap().get(model.getDirection());
+        	if (frames == null || frames.length == 0) {
+        		frames = model.getSpriteMap().get("right");
+        	}
+        	image = frames[0];
         } else {
             BufferedImage[] frames = model.getSpriteMap().get(model.getDirection());
             if (frames == null || frames.length == 0) {
@@ -46,20 +52,20 @@ public class PlayerView {
 	
 	 private void animate() {
 		 int spriteCounter = model.getSpriteCounter() + 1;
-		    int spriteNum = model.getSpriteNum();
+		 int spriteNum = model.getSpriteNum();
 
-		    model.setSpriteCounter(spriteCounter);
+		 model.setSpriteCounter(spriteCounter);
 
-		    if (spriteCounter > 10) {
-		        spriteNum++;
-		        BufferedImage[] frames = model.getSpriteMap().get(model.getDirection());
-		        int maxFrame = frames != null ? frames.length : 1;
-		        if (spriteNum > maxFrame) {
-		            spriteNum = 1;
-		        }
-		        model.setSpriteNum(spriteNum); // <- salva il nuovo frame
-		        model.setSpriteCounter(0);     // <- resetta il contatore
-		    }	    
+		 if (spriteCounter > 10) {
+			 spriteNum++;
+			 BufferedImage[] frames = model.getSpriteMap().get(model.getDirection());
+			 int maxFrame = frames != null ? frames.length : 1;
+			 if (spriteNum > maxFrame) {
+				 spriteNum = 1;
+			 }
+			 model.setSpriteNum(spriteNum); // <- salva il nuovo frame
+			 model.setSpriteCounter(0);     // <- resetta il contatore
+		 }	    
 	 }
 
 }
