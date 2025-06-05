@@ -42,6 +42,8 @@ public class Player extends Entity{
 		y = 0;
 		yVelocity = 0;
 		jumpSpeed = 12;
+		speedX = 4;
+		speedY = 4;
 		gravitySpeed = 1;
 		spriteMap = new HashMap<>();
 	}
@@ -85,6 +87,8 @@ public class Player extends Entity{
             for (int i = 0; i < 5; i++) {
                 hitFrames[i] = ImageIO.read(getClass().getResourceAsStream("/PLAYER/e" + (i + 1) + ".png"));
             }
+            
+            spriteMap.put("hit", hitFrames);
 
 
         } catch (IOException e) {
@@ -174,27 +178,26 @@ public class Player extends Entity{
 
 	public void climb(String direction) {
 		if (this.getMovement() == MovementState.CLIMBING) {
-			if (direction.equals("up")) { y -= speedY; return; }
-            if (direction.equals("down")) { y += speedY;  return; }
+			if (direction.equals("up")) { this.y -= speedY; return; }
+            if (direction.equals("down")) { this.y += speedY;  return; }
 		}
 		
 	}
 
 	public void walk(String direction) {
+		setMovement(MovementState.WALKING);
 		if (direction.equals("left")) {
-            int nx = x - speedX;
-            setMovement(MovementState.WALKING);
+            this.x -= speedX;
         } else if (direction.equals("right")) {
-            int nx = x + speedX;
-            setMovement(MovementState.WALKING);
+            this.x += speedX;
         }
 		
 	}
 
-	public void jump(String direction) {
+	public void jump() {
 		 if (direction.equals("jump") && this.movement != MovementState.JUMPING) {
 	            setMovement(MovementState.JUMPING);
-	            yVelocity = -jumpSpeed;
+	            this.yVelocity = -jumpSpeed;
 	        }
 	}
 

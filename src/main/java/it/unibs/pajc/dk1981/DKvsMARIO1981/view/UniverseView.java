@@ -15,6 +15,7 @@ import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 public class UniverseView extends JPanel implements KeyListener{
 	
 	private Universe universe = new Universe();
+	private Player player;
 	
 	public UniverseView() {
 		this.setFocusable(true);
@@ -47,7 +48,7 @@ public class UniverseView extends JPanel implements KeyListener{
 				case KeyEvent.VK_DOWN: 	p.climb("down"); 				break;
 				case KeyEvent.VK_RIGHT: p.walk("right");				break;
 				case KeyEvent.VK_LEFT:	p.walk("left");				break;
-				case KeyEvent.VK_SPACE:	p.jump("jump");				break;
+				case KeyEvent.VK_SPACE:	p.jump();				break;
 			}
 		}
 
@@ -61,10 +62,23 @@ public class UniverseView extends JPanel implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if(!currentActiveKeys.contains(e.getKeyCode()))
-			currentActiveKeys.add(e.getKeyCode());
+		int key = e.getKeyCode();
 
-		
+        if (key == KeyEvent.VK_LEFT) {
+            player.walk("left");
+            player.setDirection("left");
+        } else if (key == KeyEvent.VK_RIGHT) {
+            player.walk("right");
+            player.setDirection("right");
+        } else if (key == KeyEvent.VK_UP) {
+            player.climb("up");
+            player.setDirection("up");
+        } else if (key == KeyEvent.VK_DOWN) {
+            player.climb("down");
+            player.setDirection("down");
+        } else if (key == KeyEvent.VK_SPACE) {
+            player.jump();
+        }
 	}
 
 	@Override

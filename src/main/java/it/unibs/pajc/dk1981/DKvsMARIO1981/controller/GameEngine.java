@@ -1,106 +1,50 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.controller;
 
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import java.awt.Graphics2D;
 
-import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.view.PlayerView;
 
-public class GameEngine implements KeyListener {
-	Player mario;
-	Universe universe;
+public class GameEngine {
+	private Universe universe;
+	private PlayerController controller;
+	private Player mario;
+	private PlayerView playerView;
 
 	public GameEngine() {
 		universe = new Universe();
 		mario = new Player(universe);
-		 
-		 // position droid in the middle
+		universe.setPlayer(mario); // Assicurati che Universe abbia questo metodo
+
+		// Posiziona Mario nella mappa
 		mario.setX(universe.getTilecol() / 2);
 		mario.setY(universe.getTileRows() / 2);
-		 
-		 //add the npcs
-		 
-		 
-		 
-		}
-	
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+
+		// Inizializza controller e vista
+		controller = new PlayerController(mario, universe);
+		playerView = new PlayerView(mario);
 	}
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	private ArrayList<Integer> currentActiveKeys = new ArrayList<>();
-	
-	public void applyControls() {
-		if (mario == null) {
-			return;
-		}
-		
-		//TODO: COONTROLLER CHE GESTISTE LA MODIFICA DELLO STATO
-		
-		for(Integer keycode : currentActiveKeys) {
-			switch(keycode) {
-				
-//			case KeyEvent.VK_UP: 	mario.accelerate(0.2f); 	break;
-//			case KeyEvent.VK_DOWN: 	mario.accelerate(-0.2f); 	break;
-//			case KeyEvent.VK_RIGHT:	mario.turn(-0.1f);			break;
-//			case KeyEvent.VK_LEFT:	mario.turn(0.1f);			break;
-//			case KeyEvent.VK_SPACE:	mario.fire();				break;
-
-				
-			}
-		}
-		
-	}
-	
 	public void update(float deltaTime) {
-		//empty
+		controller.update(deltaTime);
 	}
-	
+
 	public void render(Graphics g) {
-		
-	}
-
-	public Player getMario() {
-		return mario;
-	}
-
-	public void setMario(Player mario) {
-		this.mario = mario;
+		Graphics2D g2 = (Graphics2D) g;
+		playerView.draw(g2);
 	}
 
 	public Universe getUniverse() {
 		return universe;
 	}
 
-	public void setUniverse(Universe universe) {
-		this.universe = universe;
+	public PlayerController getController() {
+		return controller;
 	}
 
-	public ArrayList<Integer> getCurrentActiveKeys() {
-		return currentActiveKeys;
+	public Player getPlayer() {
+		return mario;
 	}
-
-	public void setCurrentActiveKeys(ArrayList<Integer> currentActiveKeys) {
-		this.currentActiveKeys = currentActiveKeys;
-	}
-	
-	
-	
-
 }

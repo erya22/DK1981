@@ -29,9 +29,9 @@ public class Universe {
 		this.player = new Player(this);
 		
 		
-		map = TileMapLoader.loadMap();
-		tileset = TileMapLoader.loadTileset();
-		tiles = TileUtils.loadTiles(tileset, map.getTilewidth(), map.getTileheight(), 16);
+		this.map = TileMapLoader.loadMap();
+		this.tileset = TileMapLoader.loadTileset();
+		this.tiles = TileUtils.loadTiles(tileset, map.getTilewidth(), map.getTileheight(), 16);
 		
 		
 	}

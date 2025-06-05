@@ -23,7 +23,7 @@ public class PlayerView {
             int frameIndex = (int) ((System.currentTimeMillis() - model.getHitStartTime()) / (model.getHitDuration() / 5));
             frameIndex = Math.min(frameIndex, 4); // evita IndexOutOfBounds
             BufferedImage[] hitFrames = model.getSpriteMap().get("hit");
-            image = hitFrames[frameIndex];
+            image = hitFrames != null ? hitFrames[frameIndex] : null;
         } else if (model.getMovement() == MovementState.JUMPING) {
             String jumpKey = model.getDirection().equals("right") ? "jumpR" : "jumpL";
             BufferedImage[] jumpFrames = model.getSpriteMap().get(jumpKey);
@@ -32,11 +32,16 @@ public class PlayerView {
                     : model.getSpriteMap().get(model.getDirection())[0];  // backup sicuro
         } else {
             BufferedImage[] frames = model.getSpriteMap().get(model.getDirection());
+            if (frames == null || frames.length == 0) {
+                frames = model.getSpriteMap().get("right"); // fallback
+            }
             image = frames[(model.getSpriteNum() - 1) % frames.length];
         }
 
-        g2.drawImage(image, model.getX(), model.getY(), model.getTileSize(), model.getTileSize(), null);
-        animate();
+    	if (image != null) {
+            g2.drawImage(image, model.getX(), model.getY(), model.getTileSize(), model.getTileSize(), null);
+        }
+    	animate();
 	}
 	
 	 private void animate() {

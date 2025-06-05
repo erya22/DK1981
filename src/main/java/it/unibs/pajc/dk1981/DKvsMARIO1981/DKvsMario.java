@@ -3,14 +3,15 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
 import it.unibs.pajc.dk1981.DKvsMARIO1981.controller.GameEngine;
-import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.controller.PlayerController;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.TileMapLoader;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.view.MapRenderer;
 
 public class DKvsMario extends JPanel implements Runnable {
@@ -28,27 +29,36 @@ public class DKvsMario extends JPanel implements Runnable {
     
  // Tile size variabile in base alla dimensione del pannello
     private int tileSize;
+    
+    private PlayerController controller;
+    private Player player;
 
 
     
     public DKvsMario() {
-    	setDoubleBuffered(true);
-    	
-    	// Inizializza con un tileSize di default
+        setDoubleBuffered(true);
         this.tileSize = 16;
-        
-        // Inizializza il renderer con tileSize iniziale
+
+        // Inizializza mappa e renderer
         BufferedImage tileset = TileMapLoader.loadTileset();
         renderer = new MapRenderer(tileset, gameMap.getMap().getTilewidth(), gameMap.getMap().getTileheight(), tileSize);
 
-        // Inizializza buffer immagine con dimensione di default
         int screenW = tileSize * MAP_WIDTH_TILES;
         int screenH = tileSize * MAP_HEIGHT_TILES;
         screen = new BufferedImage(screenW, screenH, BufferedImage.TYPE_INT_RGB);
-
-        // Setta dimensione iniziale preferita basata sul tileSize iniziale
         setPreferredSize(new Dimension(screenW, screenH));
+
+        // 🔽 Inizializza il player
+        this.player = new Player(gameMap);
+        gameMap.setPlayer(player); // <- Associa il player all'universo, se hai un metodo del genere
+
+        // 🔽 Inizializza il controller con player e universo
+        this.controller = engine.getController();
+        this.addKeyListener(controller);
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
+
 	
 	
     /**
@@ -110,6 +120,10 @@ public class DKvsMario extends JPanel implements Runnable {
         setPreferredSize(new Dimension(tileSize * 28, tileSize * 32));
         revalidate();
         repaint();
+    }
+    
+    public PlayerController getController() {
+        return controller;
     }
     
     public void start() {
