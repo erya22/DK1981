@@ -240,13 +240,9 @@ public class Universe {
 	}
 
 	public int coo(int x, int y, byte mask) {
-			for (int yi = this.cooMap[0].length-1; yi >0; yi--) {
-				if (this.cooMap[x][yi] != 0)
-					log.info("x{} y{} val{}", x, yi, this.cooMap[x][yi]);
-			}
-		
+		cooDebug(x+15, y+24);
 		try {
-			return this.cooMap[x][y+30] & mask;
+			return this.cooMap[x+15][y+24] & mask;
 		} catch (Exception e) {
 			return 0;
 		}
@@ -265,23 +261,38 @@ public class Universe {
 	}
 	
 	public int findLadderUp(int x, int y) {
-			for (int i = y; i < y + 30; i++) {
-				if (this.coo(x, i, LADDER)!= 0) return i;
-			} 
-
-			return -1;
-	}
-	
-	public int findLadderDown(int x, int y) {
-		for (int i = y; i > y - 30; i--) {
+		for (int i = y; i >= y - 20; i--) {
 			if (this.coo(x, i, LADDER)!= 0) return i;
 		} 
 
 		return -1;
-}
+	}
+	
+	public int findLadderDown(int x, int y) {
+		cooDebug(x, y);
+		for (int i = y; i <= y + 20; i++) {
+			if (this.coo(x, i, LADDER)!= 0) return i;
+		} 
+
+		return -1;
+	}
 	
 	
-	
+	public void cooDebug(int x, int y) {
+		StringBuilder p = new StringBuilder();
+		for (int yi = -20; yi < 20; yi++) {
+			p.append("\n").append(y+yi).append("| ");
+			for (int xi = -20; xi < 20; xi++) {				
+				try {
+					p.append(" ")
+					 .append(this.cooMap[x+xi][y+yi]);
+				} catch (Exception e) {
+					p.append(" X");
+				}
+			}
+		}
+		log.info("COORDS[{},{}] = {}", x, y, p);
+	}
 	
 
 }

@@ -47,13 +47,13 @@ public class Player extends Entity{
 		this.setDirection("right");
 		this.setX(24 * 3); 
 		this.setY(24 * 30 - 8);
-		yVelocity = 0;
+		setyVelocity(0);
 		this.setSpeedX(4);
 		this.setSpeedY(4);
 		this.setSpriteMap(new HashMap<>());
-		terrain = Terrain.BEAM;
-		movement = MovementState.IDLE;
-		state = State.ALIVE;
+		setTerrain(Terrain.BEAM);
+		setMovement(MovementState.IDLE);
+		setState(State.ALIVE);
 		
 	}
 	
@@ -123,6 +123,10 @@ public class Player extends Entity{
 
 	public void setyVelocity(int yVelocity) {
 		this.yVelocity = yVelocity;
+	}
+	
+	public void addyVelocity(int adder) {
+		this.yVelocity += adder;
 	}
 
 	public State getState() {
@@ -197,13 +201,32 @@ public class Player extends Entity{
 		this.terrain = terrain;
 	}
 
+	public int getxVelocity() {
+		return xVelocity;
+	}
+
+	public void setxVelocity(int xVelocity) {
+		this.xVelocity = xVelocity;
+	}
+
+	public int getJumpStrenght() {
+		return jumpStrenght;
+	}
+
+	public int getGravity() {
+		return gravity;
+	}
+
+	public int getMoveSpeed() {
+		return moveSpeed;
+	}
 
 	public void climb(MovementState movement) {
 		this.setMovement(movement);
 		log.info("x{} y{}", this.getX(), this.getY());
 		
 		if (this.getMovement() == MovementState.UPCLIMB) {
-			if (this.terrain == Terrain.LADDER) {
+			if (getTerrain() == Terrain.LADDER) {
 				this.addY(-this.getSpeedY());
 				int newY = this.getUniverse().findLadderUp(this.getX(), this.getY());
 				if (newY != -1) {
@@ -222,7 +245,7 @@ public class Player extends Entity{
 				}
 			}
 		} else if (this.getMovement() == MovementState.DOWNCLIMB) {
-			if (this.terrain == Terrain.LADDER) {
+			if (getTerrain() == Terrain.LADDER) {
 				this.addY(this.getSpeedY());
 				int newY = this.getUniverse().findLadderDown(this.getX(), this.getY());
 				if (newY != -1) {
@@ -258,16 +281,16 @@ public class Player extends Entity{
 	}
 
 	public void startJump() {
-	    if (terrain == Terrain.BEAM && movement != MovementState.JUMPING) {
-	        yVelocity = -jumpStrenght;
+	    if (getTerrain() == Terrain.BEAM && getMovement() != MovementState.JUMPING) {
+	        this.setyVelocity(yVelocity);
 	        
 	     // Mantieni velocità orizzontale
 	        if (this.getDirection().equals("left")) {
-	            xVelocity = -moveSpeed;
+	            setxVelocity(-moveSpeed); 
 	        } else if (this.getDirection().equals("right")) {
-	            xVelocity = moveSpeed;
+	        	setxVelocity(moveSpeed);
 	        } else {
-	            xVelocity = 0; // nessuna direzione = salto verticale
+	        	setxVelocity(0); // nessuna direzione = salto verticale
 	        }
 	        
 	        setMovement(MovementState.JUMPING);
@@ -276,19 +299,19 @@ public class Player extends Entity{
 	}
 	
 	public void updatePhysics() {
-	    if (terrain == Terrain.AIR || movement == MovementState.JUMPING) {
-	        yVelocity += gravity;
+	    if (getTerrain() == Terrain.AIR || getMovement() == MovementState.JUMPING) {
+	        addyVelocity(gravity); 
 	        int newY = getY() + yVelocity;
 	        int newX = getX() + xVelocity;
 
 	        int beamY = getUniverse().findBeam(getX(), getY());
 
-	        if (beamY != -1 && yVelocity > 0 && beamY < newY) {
+	        if (beamY != -1 && getyVelocity() > 0 && beamY < newY) {
 	            setY(beamY);
 	            setMovement(MovementState.IDLE);
 	            setTerrain(Terrain.BEAM);
-	            yVelocity = 0;
-	            xVelocity = 0;
+	            setyVelocity(0); 
+	            setxVelocity(0);
 	        } else {
 	            setY(newY);
 	            setX(newX);
@@ -301,10 +324,10 @@ public class Player extends Entity{
 	
 
 	public void idle() {
-		if (terrain != Terrain.AIR) {
+		if (getTerrain() != Terrain.AIR) {
 			return;
 		}
-		switch(movement) {
+		switch(getMovement()) {
 			case JUMPING: 
 				this.setMovement(MovementState.FALLING);
 				this.yVelocity = 0;

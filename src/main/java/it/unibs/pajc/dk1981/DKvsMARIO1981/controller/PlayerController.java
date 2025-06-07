@@ -58,7 +58,6 @@ public class PlayerController implements KeyListener, MouseListener, MouseMotion
     	if (player.getState() == State.DEAD || player.getState() == State.HIT) return;
     	
     	player.updatePhysics();
-    	updateTerrain();
     	
     	if (player.getState() == State.INVINCIBLE) {
             long elapsed = System.currentTimeMillis() - player.getInvincibleTime();
@@ -66,14 +65,6 @@ public class PlayerController implements KeyListener, MouseListener, MouseMotion
                 player.setState(State.ALIVE); 
             }
     	}
-    }
-    
-    public void updateTerrain() {
-        if (player.getTerrain() == Terrain.BEAM) {
-            player.setTerrain(Terrain.BEAM);
-        } else {
-            player.setTerrain(Terrain.AIR);
-        }
     }
 
     
