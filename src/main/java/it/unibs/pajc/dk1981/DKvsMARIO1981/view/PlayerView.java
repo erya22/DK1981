@@ -4,11 +4,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import javax.swing.JComponent;
+
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.MovementState;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.State;
 
-public class PlayerView {
+public class PlayerView extends JComponent{
 	private Player model;
 	
 	public PlayerView(Player model) {

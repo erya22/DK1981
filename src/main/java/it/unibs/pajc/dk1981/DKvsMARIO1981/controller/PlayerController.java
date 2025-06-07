@@ -2,20 +2,30 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981.controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.MovementState;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.State;
-import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Terrain;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.view.PlayerView;
 
-public class PlayerController implements KeyListener {
-    private Player player;
-    private Universe universe;
+public class PlayerController implements KeyListener, MouseListener, MouseMotionListener {
+	private static final Logger log = LoggerFactory.getLogger(PlayerController.class);
+	
+	private Player player;
+    private PlayerView view;
 
-    public PlayerController(Player player, Universe universe) {
+    public PlayerController(Player player, PlayerView view) {
         this.player = player;
-        this.universe = universe;
+        this.view = view;
+        view.addMouseListener(this);
+
     }
 
 
@@ -31,19 +41,24 @@ public class PlayerController implements KeyListener {
                 player.walk("right");
                 break;
             case KeyEvent.VK_UP:
-                player.climb("up");
+                player.climb(MovementState.UPCLIMB);
                 break;
             case KeyEvent.VK_DOWN:
-                player.climb("down");
+                player.climb(MovementState.DOWNCLIMB);
                 break;
             case KeyEvent.VK_SPACE:
-                player.jump();
+            	if (player.getMovement() != MovementState.JUMPING) {
+                    player.startJump(); // nuova funzione che imposta yVelocity
+                }
                 break;
         }
     }
     
     public void update(float deltaTime) {
     	if (player.getState() == State.DEAD || player.getState() == State.HIT) return;
+    	
+    	player.updatePhysics();
+    	updateTerrain();
     	
     	if (player.getState() == State.INVINCIBLE) {
             long elapsed = System.currentTimeMillis() - player.getInvincibleTime();
@@ -53,9 +68,16 @@ public class PlayerController implements KeyListener {
     	}
     }
     
-    private void handleMovement() {
-    	
+    public void updateTerrain() {
+        if (player.getTerrain() == Terrain.BEAM) {
+            player.setTerrain(Terrain.BEAM);
+        } else {
+            player.setTerrain(Terrain.AIR);
+        }
     }
+
+    
+  
     
     private void handleBarrelCollision() {
     	
@@ -79,14 +101,68 @@ public class PlayerController implements KeyListener {
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	
-	public Universe getUniverse() {
-        return universe;
-    }
 
-    public void setUniverse(Universe universe) {
-        this.universe = universe;
-    }
+
+	public PlayerView getView() {
+		return view;
+	}
+
+
+	public void setView(PlayerView view) {
+		this.view = view;
+	}
+
+
+	@Override
+	public void mouseClicked(java.awt.event.MouseEvent e) {
+	    int x = e.getX();
+	    int y = e.getY();
+	    log.info("Mouse clicked at: x={}, y={}, mappa{}", x, y, this.getPlayer().getUniverse().coo(x, y, (byte) 0xf ));
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 
     
     

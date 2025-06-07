@@ -11,7 +11,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class GameApp {
+	private static final Logger log = LoggerFactory.getLogger(GameApp.class);
 
 	private JFrame frame;
 
@@ -22,10 +26,11 @@ public class GameApp {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					log.info("START");
 					GameApp window = new GameApp();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					log.error("Eccezione", e);
 				}
 			}
 		});

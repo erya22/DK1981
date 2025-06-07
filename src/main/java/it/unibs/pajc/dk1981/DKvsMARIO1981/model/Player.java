@@ -6,18 +6,26 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GameWindow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Player extends Entity{
+	private static final Logger log = LoggerFactory.getLogger(Player.class);
 
 	//GRAVITY/SPEED
-	private int jumpSpeed;
-	private int gravitySpeed;
+	private final int jumpStrenght = 12;
+	private final int gravity = 1;
+	private final int moveSpeed = 4;
+	
 	private int yVelocity;
+	private int xVelocity;
+	
+	
 
 	//STATO DI GIOCO
 	private State state;
 	private MovementState movement;
+	private Terrain terrain;
 	
 	//GESTIONE VITE
 	private int vite = 3;
@@ -27,10 +35,6 @@ public class Player extends Entity{
 	private int tileSize = 32;
 	private long hitStartTime = 0;
 	private final long HIT_DURATION = 1500;
-	
-	private Universe universe;
-	
-	
 
 	
 	public Player(Universe universe) {
@@ -40,14 +44,17 @@ public class Player extends Entity{
 	}
 
 	public void setDefaultValues() {
+		this.setDirection("right");
 		this.setX(24 * 3); 
 		this.setY(24 * 30 - 8);
 		yVelocity = 0;
-		jumpSpeed = 12;
 		this.setSpeedX(4);
 		this.setSpeedY(4);
-		gravitySpeed = 1;
 		this.setSpriteMap(new HashMap<>());
+		terrain = Terrain.BEAM;
+		movement = MovementState.IDLE;
+		state = State.ALIVE;
+		
 	}
 	
 	
@@ -100,20 +107,15 @@ public class Player extends Entity{
     }
 
 	public int getJumpSpeed() {
-		return jumpSpeed;
+		return jumpStrenght;
 	}
 
-	public void setJumpSpeed(int jumpSpeed) {
-		this.jumpSpeed = jumpSpeed;
-	}
+	
 
 	public int getGravitySpeed() {
-		return gravitySpeed;
+		return gravity;
 	}
 
-	public void setGravitySpeed(int gravitySpeed) {
-		this.gravitySpeed = gravitySpeed;
-	}
 
 	public int getyVelocity() {
 		return yVelocity;
@@ -179,28 +181,137 @@ public class Player extends Entity{
 		return HIT_DURATION;
 	}
 
-	public void climb(String direction) {
-		if (this.getMovement() == MovementState.UPCLIMB ) {
-			this.addY(-this.getSpeedY());
-		} else {
-         this.addY(this.getSpeedY());
+	public int getIMMUNITY() {
+		return IMMUNITY;
+	}
+
+	public long getHIT_DURATION() {
+		return HIT_DURATION;
+	}
+
+	public Terrain getTerrain() {
+		return terrain;
+	}
+
+	public void setTerrain(Terrain terrain) {
+		this.terrain = terrain;
+	}
+
+
+	public void climb(MovementState movement) {
+		this.setMovement(movement);
+		log.info("x{} y{}", this.getX(), this.getY());
+		
+		if (this.getMovement() == MovementState.UPCLIMB) {
+			if (this.terrain == Terrain.LADDER) {
+				this.addY(-this.getSpeedY());
+				int newY = this.getUniverse().findLadderUp(this.getX(), this.getY());
+				if (newY != -1) {
+					this.setY(newY);
+				} else {
+					newY = this.getUniverse().findBeam(this.getX(), this.getY());
+					this.setTerrain(Terrain.BEAM);
+					this.setMovement(MovementState.IDLE);
+				}
+					
+			} else {
+				int newY = this.getUniverse().findLadderUp(this.getX(), this.getY());
+				if (newY != -1) {
+					this.setTerrain(Terrain.LADDER);
+					this.setY(newY);
+				}
+			}
+		} else if (this.getMovement() == MovementState.DOWNCLIMB) {
+			if (this.terrain == Terrain.LADDER) {
+				this.addY(this.getSpeedY());
+				int newY = this.getUniverse().findLadderDown(this.getX(), this.getY());
+				if (newY != -1) {
+					this.setY(newY);
+				} else {
+					newY = this.getUniverse().findBeam(this.getX(), this.getY());
+					this.setTerrain(Terrain.BEAM);
+					this.setMovement(MovementState.IDLE);
+				}
+					
+			} else {
+				int newY = this.getUniverse().findLadderDown(this.getX(), this.getY());
+				if (newY != -1) {
+					this.setTerrain(Terrain.LADDER);
+					this.setY(newY);
+				}
+			}
 		}
 		
 	}
 
+
 	public void walk(String direction) {
+		log.info("x{} y{} coomap{}", this.getX(), this.getY(), this.getUniverse().coo(this.getX(), this.getY(), Universe.BEAM));
 		setMovement(MovementState.WALKING);
 		if (direction.equals("left")) {
             this.addX(-this.getSpeedX());
+            this.setY(this.getUniverse().findBeam(this.getX(), this.getY()));
         } else if (direction.equals("right")) {
             this.addX(this.getSpeedX());
+            this.setY(this.getUniverse().findBeam(this.getX(), this.getY()));
         }
-		
 	}
 
-	public void jump() {
-	            setMovement(MovementState.JUMPING);
-	            this.yVelocity = -jumpSpeed;
+	public void startJump() {
+	    if (terrain == Terrain.BEAM && movement != MovementState.JUMPING) {
+	        yVelocity = -jumpStrenght;
+	        
+	     // Mantieni velocità orizzontale
+	        if (this.getDirection().equals("left")) {
+	            xVelocity = -moveSpeed;
+	        } else if (this.getDirection().equals("right")) {
+	            xVelocity = moveSpeed;
+	        } else {
+	            xVelocity = 0; // nessuna direzione = salto verticale
+	        }
+	        
+	        setMovement(MovementState.JUMPING);
+	        setTerrain(Terrain.AIR);
+	    }
+	}
+	
+	public void updatePhysics() {
+	    if (terrain == Terrain.AIR || movement == MovementState.JUMPING) {
+	        yVelocity += gravity;
+	        int newY = getY() + yVelocity;
+	        int newX = getX() + xVelocity;
+
+	        int beamY = getUniverse().findBeam(getX(), getY());
+
+	        if (beamY != -1 && yVelocity > 0 && beamY < newY) {
+	            setY(beamY);
+	            setMovement(MovementState.IDLE);
+	            setTerrain(Terrain.BEAM);
+	            yVelocity = 0;
+	            xVelocity = 0;
+	        } else {
+	            setY(newY);
+	            setX(newX);
+	        }
+	    }
+	}
+
+
+	
+	
+
+	public void idle() {
+		if (terrain != Terrain.AIR) {
+			return;
+		}
+		switch(movement) {
+			case JUMPING: 
+				this.setMovement(MovementState.FALLING);
+				this.yVelocity = 0;
+				break;
+			
+		}
+		
 	}
 
 	

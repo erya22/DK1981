@@ -55,6 +55,7 @@ public class DKvsMario extends JPanel implements Runnable {
         // 🔽 Inizializza il controller con player e universo
         this.controller = engine.getController();
         this.addKeyListener(controller);
+        this.addMouseListener(controller);
         this.setFocusable(true);
         this.requestFocusInWindow();
     }

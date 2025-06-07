@@ -104,11 +104,17 @@ public abstract class Entity {
 	public void setTileSize(int tileSize) {
 		this.tileSize = tileSize;
 	}
-	
-	
-	
-	
-	
 
+	public Universe getUniverse() {
+		return universe;
+	}
+
+	public void setUniverse(Universe universe) {
+		this.universe = universe;
+	}
+
+	public String getName() {
+		return name;
+	}
 	
 }

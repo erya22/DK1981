@@ -19,12 +19,14 @@ public class GameEngine {
 		universe.setPlayer(mario); // Assicurati che Universe abbia questo metodo
 
 		// Inizializza controller e vista
-		controller = new PlayerController(mario, universe);
 		playerView = new PlayerView(mario);
+		controller = new PlayerController(mario, playerView);
+		
 	}
 
 	public void update(float deltaTime) {
 		controller.update(deltaTime);
+		mario.updatePhysics();
 	}
 
 	public void render(Graphics g) {

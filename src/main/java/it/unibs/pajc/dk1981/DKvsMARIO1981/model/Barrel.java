@@ -1,14 +1,10 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
 public class Barrel extends GameItem {
-	
-
 	
 	//SPEED
 	private int speedX, speedY;
