@@ -228,17 +228,17 @@ public class Player extends Entity{
 		if (this.getMovement() == MovementState.UPCLIMB) {
 			if (getTerrain() == Terrain.LADDER) {
 				this.addY(-this.getSpeedY());
-				int newY = this.getUniverse().findLadderUp(this.getX(), this.getY());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
 				if (newY != -1) {
 					this.setY(newY);
 				} else {
-					newY = this.getUniverse().findBeam(this.getX(), this.getY());
+					newY = this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize());
 					this.setTerrain(Terrain.BEAM);
 					this.setMovement(MovementState.IDLE);
 				}
 					
 			} else {
-				int newY = this.getUniverse().findLadderUp(this.getX(), this.getY());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
 				if (newY != -1) {
 					this.setTerrain(Terrain.LADDER);
 					this.setY(newY);
@@ -247,17 +247,17 @@ public class Player extends Entity{
 		} else if (this.getMovement() == MovementState.DOWNCLIMB) {
 			if (getTerrain() == Terrain.LADDER) {
 				this.addY(this.getSpeedY());
-				int newY = this.getUniverse().findLadderDown(this.getX(), this.getY());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
 				if (newY != -1) {
 					this.setY(newY);
 				} else {
-					newY = this.getUniverse().findBeam(this.getX(), this.getY());
+					newY = this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize());
 					this.setTerrain(Terrain.BEAM);
 					this.setMovement(MovementState.IDLE);
 				}
 					
 			} else {
-				int newY = this.getUniverse().findLadderDown(this.getX(), this.getY());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
 				if (newY != -1) {
 					this.setTerrain(Terrain.LADDER);
 					this.setY(newY);
@@ -269,14 +269,13 @@ public class Player extends Entity{
 
 
 	public void walk(String direction) {
-		log.info("x{} y{} coomap{}", this.getX(), this.getY(), this.getUniverse().coo(this.getX(), this.getY(), Universe.BEAM));
 		setMovement(MovementState.WALKING);
 		if (direction.equals("left")) {
             this.addX(-this.getSpeedX());
-            this.setY(this.getUniverse().findBeam(this.getX(), this.getY()));
+            this.setY(this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize()));
         } else if (direction.equals("right")) {
             this.addX(this.getSpeedX());
-            this.setY(this.getUniverse().findBeam(this.getX(), this.getY()));
+            this.setY(this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize()));
         }
 	}
 
@@ -304,7 +303,7 @@ public class Player extends Entity{
 	        int newY = getY() + yVelocity;
 	        int newX = getX() + xVelocity;
 
-	        int beamY = getUniverse().findBeam(getX(), getY());
+	        int beamY = getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize());
 
 	        if (beamY != -1 && getyVelocity() > 0 && beamY < newY) {
 	            setY(beamY);

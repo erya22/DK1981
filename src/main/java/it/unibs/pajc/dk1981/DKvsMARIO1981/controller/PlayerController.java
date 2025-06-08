@@ -108,7 +108,7 @@ public class PlayerController implements KeyListener, MouseListener, MouseMotion
 	public void mouseClicked(java.awt.event.MouseEvent e) {
 	    int x = e.getX();
 	    int y = e.getY();
-	    log.info("Mouse clicked at: x={}, y={}, mappa{}", x, y, this.getPlayer().getUniverse().coo(x, y, (byte) 0xf ));
+	    log.info("Mouse clicked at: x={}, y={}}", x, y);
 	}
 
 

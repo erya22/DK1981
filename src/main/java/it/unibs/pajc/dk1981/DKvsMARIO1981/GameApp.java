@@ -57,21 +57,21 @@ public class GameApp {
 			e.printStackTrace();
 		}
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(true);
+		frame.setResizable(false); //TODO DA METTERE TRUE
 		
 		Timer resizeTimer = new Timer(200, e -> {
 		    Dimension size = frame.getContentPane().getSize(); // dimensioni effettive dell'area disponibile
 		    int tileW = size.width / 28;
 		    int tileH = size.height / 32;
-		    int newTileSize = Math.min(tileW, tileH);
+//		    int newTileSize = Math.min(tileW, tileH);
 
-		    int mapWidth = newTileSize * 28;
-		    int mapHeight = newTileSize * 32;
+//		    int mapWidth = newTileSize * 28;
+//		    int mapHeight = newTileSize * 32;
 
-		    gamePanel.setTileSize(newTileSize);
-		    gamePanel.setPreferredSize(new Dimension(mapWidth, mapHeight));
+//		    gamePanel.setTileSize(newTileSize);
+//		    gamePanel.setPreferredSize(new Dimension(mapWidth, mapHeight));
 
-		    frame.getContentPane().setPreferredSize(new Dimension(mapWidth, mapHeight));
+		    frame.getContentPane().setPreferredSize(new Dimension(size.width, size.height));
 		    frame.pack(); // forza il ridimensionamento del frame
 		    
 		    gamePanel.repaint();
@@ -93,8 +93,8 @@ public class GameApp {
         int tileRows = 32;  // es. 32
  
         //Tile size massimo per farci stare tutta la mappa + 50px in fondo
-        int tileSize = (maxHeight - 50) / tileRows;
-        
+//        int tileSize = (maxHeight - 50) / tileRows;
+        int tileSize = 32;
         int panelWidth = tileSize * tileCols;
         int panelHeight = tileSize * tileRows;
      

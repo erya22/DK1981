@@ -37,8 +37,7 @@ public class DKvsMario extends JPanel implements Runnable {
     
     public DKvsMario() {
         setDoubleBuffered(true);
-        this.tileSize = 16;
-
+        this.tileSize = 32;
         // Inizializza mappa e renderer
         BufferedImage tileset = TileMapLoader.loadTileset();
         renderer = new MapRenderer(tileset, universe.getMap().getTilewidth(), universe.getMap().getTileheight(), tileSize);

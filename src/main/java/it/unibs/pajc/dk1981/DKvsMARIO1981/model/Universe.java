@@ -1,6 +1,5 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +22,8 @@ public class Universe {
 	private BufferedImage[] tiles;
 	
 	//ARRAY BIDIMENSIONALE
-	byte[][] cooMap;
-	
-	public static byte LADDER = (byte) 0x2;
-	public static byte BEAM = (byte) 0x1;
+	boolean[][] ladders;
+	boolean[][] beams;
 	
 	//ARCHIVIO OGGETTI
 	private List<GameItem> items = new ArrayList<GameItem>();
@@ -39,61 +36,13 @@ public class Universe {
 	public Universe() {
 		super();
 		this.player = new Player(this);
-		this.cooMap = createCooMap();
-		
-//		for (int x = 0; x < this.cooMap.length; x++) {
-//			for (int y = 0; y < this.cooMap[0].length; y++) {
-//				if (this.cooMap[x][y] != 0)
-//					log.info("COOMAP {} {} = {}", x, y, this.cooMap[x][y]);
-//			}
-//		}
-		
 		this.map = TileMapLoader.loadMap();
+		this.ladders = MapParser.calcolaPixelScala(map.getLayers().get(0).getData());
+		this.beams = MapParser.calcolaPixelTrave(map.getLayers().get(1).getData());
 		this.tileset = TileMapLoader.loadTileset();
 		this.tiles = TileUtils.loadTiles(tileset, map.getTilewidth(), map.getTileheight(), 16);
 		
 		
-	}
-
-	private byte[][] createCooMap() {
-		byte[][] mappa = new byte[TILE_ROWS*tileSize][TILECOL*tileSize];
-		int[][] beams = {
-	            {0, 744, 669, 725},
-	            {622, 648, 2, 628},
-	            {48, 552, 671, 532},
-	            {623, 456, 1, 437},
-	            {46, 359, 671, 341},
-	            {620, 263, 1, 257},
-	            {407, 168, 240, 165}
-	        };
-		int[][] ladders = {
-					    {288, 737, 308, 720},
-					    {287, 672, 312, 660},
-					    {552, 727, 575, 647},
-					    {335, 637, 358, 540},
-					    {95, 629, 119, 548},
-					    {239, 544, 263, 524},
-					    {239, 480, 263, 469},
-					    {383, 539, 408, 473},
-					    {552, 534, 575, 476},
-					    {527, 451, 551, 432},
-					    {527, 380, 551, 364},
-					    {287, 444, 311, 348},
-					    {94, 440, 118, 355},
-					    {240, 356, 264, 342},
-					    {240, 310, 264, 280},
-					    {552, 343, 577, 262}
-		};
-		
-		 for (int[] c : beams) {
-            bresenhamLine(mappa, BEAM, c[0], c[1], c[2], c[3]);
-		 }
-		 
-		 for (int[] c : ladders) {
-			 verticalLine(mappa, LADDER, c[0], c[1], c[2], c[3]);
-		 }
-		 
-		return mappa;
 	}
 	
 	private static void bresenhamLine(byte[][] mappa, byte val, int x0, int y0, int x1, int y1) {
@@ -136,20 +85,13 @@ public class Universe {
 		
 	}
 	
-	
 	public TileMap getMap() {
 		return map;
 	}
 
-
-
-
 	public void setMap(TileMap map) {
 		this.map = map;
 	}
-
-
-
 
 	public List<GameItem> getItems() {
 		return items;
@@ -183,115 +125,59 @@ public class Universe {
 		this.player = player;
 	}
 
-
-
-
 	public int getTileSize() {
 		return tileSize;
 	}
-
-
-	
 
 	public void setTileSize(int tileSize) {
 		this.tileSize = tileSize;
 	}
 
-
-
-
 	public BufferedImage getTileset() {
 		return tileset;
 	}
-
-
-
 
 	public void setTileset(BufferedImage tileset) {
 		this.tileset = tileset;
 	}
 
-
-
-
 	public BufferedImage[] getTiles() {
 		return tiles;
 	}
-
-
-
 
 	public void setTiles(BufferedImage[] tiles) {
 		this.tiles = tiles;
 	}
 
-
-
-
 	public int getTilecol() {
 		return TILECOL;
 	}
-
-
-
 
 	public int getTileRows() {
 		return TILE_ROWS;
 	}
 
-	public int coo(int x, int y, byte mask) {
-		cooDebug(x+15, y+24);
-		try {
-			return this.cooMap[x+15][y+24] & mask;
-		} catch (Exception e) {
-			return 0;
-		}
-	}
-
-	public int findBeam(int x, int y) {
-		try {
-			for (int i = y - 10; i < this.cooMap[0].length; i++) {
-				if (this.coo(x, i, BEAM) != 0) return i;
+	public int findBeam(int x, int y, int tileSize) {
+		int xU = x * 32 / tileSize; 
+		int yU = y* 32 / tileSize;
+		for (int i = 0; i < this.beams.length; i++) {
+			for (int j = 0; j < this.beams[0].length; j++) {
+				if (this.beams[xU+16][yU+32]) return 1;
 			}
-		} catch (Exception e) {
-			log.info("findBeam: {}", e.getMessage(), e);
 		}
-		log.info("beam not found x{} y{}-{}", x, y-10, this.cooMap[0].length);
-		return y;
-	}
-	
-	public int findLadderUp(int x, int y) {
-		for (int i = y; i >= y - 20; i--) {
-			if (this.coo(x, i, LADDER)!= 0) return i;
-		} 
-
 		return -1;
 	}
 	
-	public int findLadderDown(int x, int y) {
-		cooDebug(x, y);
-		for (int i = y; i <= y + 20; i++) {
-			if (this.coo(x, i, LADDER)!= 0) return i;
-		} 
-
-		return -1;
-	}
-	
-	
-	public void cooDebug(int x, int y) {
-		StringBuilder p = new StringBuilder();
-		for (int yi = -20; yi < 20; yi++) {
-			p.append("\n").append(y+yi).append("| ");
-			for (int xi = -20; xi < 20; xi++) {				
-				try {
-					p.append(" ")
-					 .append(this.cooMap[x+xi][y+yi]);
-				} catch (Exception e) {
-					p.append(" X");
-				}
+	public int findLadder(int x, int y, int tileSize) {
+		int xU = x * 32 / tileSize; 
+		int yU = y* 32 / tileSize;
+		
+		for (int i = 0; i < this.ladders.length; i++) {
+			for (int j = 0; j < this.ladders[0].length; j++) {
+				if (this.ladders[xU+16][yU+32]) return 1;
 			}
 		}
-		log.info("COORDS[{},{}] = {}", x, y, p);
+		return -1;
 	}
 	
 
