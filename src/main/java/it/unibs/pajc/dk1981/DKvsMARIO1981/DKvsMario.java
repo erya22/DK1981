@@ -66,7 +66,7 @@ public class DKvsMario extends JPanel implements Runnable {
      */
     public void updateSize(int tileSize) {
     	this.tileSize = tileSize;
-    	 System.out.println("Dimensione attuale della tile: " + tileSize);
+    	System.out.println("Dimensione attuale della tile: " + tileSize);
         int screenW = tileSize * MAP_WIDTH_TILES;
         int screenH = tileSize * MAP_HEIGHT_TILES;
         screen = new BufferedImage(screenW, screenH, BufferedImage.TYPE_INT_RGB);

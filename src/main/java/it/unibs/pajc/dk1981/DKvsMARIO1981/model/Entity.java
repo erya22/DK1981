@@ -6,7 +6,7 @@ import java.util.HashMap;
 public abstract class Entity {
 	
 	private final String name;
-	private int x, y;
+	private double worldX, y;
 	private int speedX, speedY;
 	
 	private String direction;

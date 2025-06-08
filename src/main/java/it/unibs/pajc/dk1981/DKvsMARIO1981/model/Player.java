@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class Player extends Entity{
 	private static final Logger log = LoggerFactory.getLogger(Player.class);
-
+	public static final int BASE_TILE = 16;
 	//GRAVITY/SPEED
 	private final int jumpStrenght = 12;
 	private final int gravity = 1;
@@ -32,7 +32,6 @@ public class Player extends Entity{
 	private long invincibleTime = 0;
 	private final int IMMUNITY = 2000;
 	
-	private int tileSize = 32;
 	private long hitStartTime = 0;
 	private final long HIT_DURATION = 1500;
 
@@ -51,6 +50,7 @@ public class Player extends Entity{
 		this.setSpeedX(4);
 		this.setSpeedY(4);
 		this.setSpriteMap(new HashMap<>());
+		this.setTileSize(32);
 		setTerrain(Terrain.BEAM);
 		setMovement(MovementState.IDLE);
 		setState(State.ALIVE);
@@ -165,13 +165,6 @@ public class Player extends Entity{
 		return IMMUNITY;
 	}
 
-	public int getTileSize() {
-		return tileSize;
-	}
-
-	public void setTileSize(int tileSize) {
-		this.tileSize = tileSize;
-	}
 
 	public long getHitStartTime() {
 		return hitStartTime;

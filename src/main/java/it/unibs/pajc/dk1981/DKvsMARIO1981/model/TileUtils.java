@@ -13,8 +13,7 @@ public class TileUtils {
             for (int x = 0; x < tilePerRow; x++) {
                 int index = y * tilePerRow + x;
                 BufferedImage tile = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-                tiles[index] = tile;
-//Scalr.resize(tile, scaledTileSize);
+                tiles[index] = Scalr.resize(tile, scaledTileSize);
             }
         }
         return tiles;

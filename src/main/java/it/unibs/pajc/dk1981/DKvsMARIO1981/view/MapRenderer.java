@@ -12,10 +12,10 @@ import it.unibs.pajc.dk1981.DKvsMARIO1981.model.TileUtils;
 public class MapRenderer extends JPanel{
 
 	 private BufferedImage[] tiles;
-	    private BufferedImage tileset;
-	    private int tileWidth;
-	    private int tileHeight;
-	    private int tileSize;
+	 private BufferedImage tileset;
+	 private int tileWidth;
+	 private int tileHeight;
+	 private int tileSize;
 
     public MapRenderer(BufferedImage tileset, int tileWidth, int tileHeight, int tileSize) {
         this.tileset = tileset;
