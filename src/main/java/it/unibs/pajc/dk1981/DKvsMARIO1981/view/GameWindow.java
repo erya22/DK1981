@@ -34,11 +34,11 @@ public class GameWindow extends JFrame {
 
 
         // Limiti dimensioni minime
-        int minTileSize = GameApp.getMinTileSize(); // es.
-        int minWidth = MAP_WIDTH_TILES * minTileSize;
-        int minHeight = MAP_HEIGHT_TILES * minTileSize;
-
-        setMinimumSize(new Dimension(minWidth, minHeight));
+//        int minTileSize = GameApp.getMinTileSize(); // es.
+//        int minWidth = MAP_WIDTH_TILES * minTileSize;
+//        int minHeight = MAP_HEIGHT_TILES * minTileSize;
+//
+//        setMinimumSize(new Dimension(minWidth, minHeight));
 
         // Limite massimo altezza: altezza schermo
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -70,7 +70,7 @@ public class GameWindow extends JFrame {
 //            }
 //        });
         
-        gamePanel.updateSize(24);
+//        gamePanel.updateSize(24);
     }
 
     

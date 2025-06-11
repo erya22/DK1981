@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import it.unibs.pajc.dk1981.DKvsMARIO1981.DKvsMario;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Layer;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.TileMap;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.TileUtils;
@@ -18,10 +19,22 @@ public class MapRenderer extends JPanel {
 	 private static final Logger log = LoggerFactory.getLogger(MapRenderer.class);
 	 private BufferedImage[] tiles;
 	 private BufferedImage tileset;
+	 
+	 int screenWidth = getWidth();  // Larghezza dello schermo
+     int screenHeight = getHeight(); // Altezza dello schermo
 
+     int mapWidth = Universe.TILE_SIZE * DKvsMario.getMapWidthTiles();
+     int mapHeight = Universe.TILE_SIZE * DKvsMario.getMapHeightTiles();
+
+     // Calcola l'offset centrale per il posizionamento della mappa
+     int offsetX = (screenWidth - mapWidth) / 2;
+     int offsetY = (screenHeight - mapHeight) / 2;
+	 
+	 
     public MapRenderer(BufferedImage tileset, int tileWidth, int tileHeight, int tileSize) {
         this.tileset = tileset;
         this.tiles = TileUtils.loadTiles(tileset, tileWidth, tileHeight, tileSize);
+        
     }
 
 //    public void setTileSize(int newTileSize) {
@@ -46,8 +59,8 @@ public class MapRenderer extends JPanel {
                     if (tileId > 0) {
                     	BufferedImage tileImage = tiles[tileId - 1]; // Tiled uses 1-based index
 //                    	int tileSize = tileImage.getWidth(); // poiché l'immagine è stata ridimensionata a tileSize x tileSize
-                    	g.drawImage(tileImage, x * Universe.TILE_SIZE, y * Universe.TILE_SIZE, Universe.TILE_SIZE, Universe.TILE_SIZE, null);
-//                    	log.info("tile size nel renderer: {}", tileSize);
+                    	g.drawImage(tileImage, x * Universe.TILE_SIZE + offsetX, y * Universe.TILE_SIZE + offsetY, 
+                                Universe.TILE_SIZE, Universe.TILE_SIZE, null);log.info("tile size nel renderer: {}", Universe.TILE_SIZE, null);
                     }
                 }
             }

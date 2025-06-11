@@ -3,6 +3,7 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981.menu;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,7 +28,9 @@ public class GameMenu extends JFrame {
     public GameMenu(Runnable onStart) {
         this.onStart = onStart;
         setTitle("DK vs Mario - Menu");
-        setSize(800, 600);
+        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        this.setUndecorated(true); // Rimuove i bordi
+        device.setFullScreenWindow(this);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);

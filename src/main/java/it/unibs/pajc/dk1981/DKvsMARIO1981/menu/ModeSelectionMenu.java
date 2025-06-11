@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import it.unibs.pajc.dk1981.DKvsMARIO1981.DKvsMario;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.GameApp;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.net.DKServer;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GUIUtils;
@@ -32,7 +32,9 @@ public class ModeSelectionMenu extends JFrame {
 
     public ModeSelectionMenu() {
         setTitle("Seleziona modalità");
-        setSize(800, 600);
+        GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        this.setUndecorated(true); // Rimuove i bordi
+        device.setFullScreenWindow(this);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);

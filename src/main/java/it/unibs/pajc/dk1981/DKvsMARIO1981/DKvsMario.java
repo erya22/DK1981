@@ -68,14 +68,14 @@ public class DKvsMario extends JPanel implements Runnable {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();        
         int screenH = screenSize.height;
         tileSize = screenH / Universe.U_TILE_ROWS;
-        int screenW = tileSize * Universe.U_TILE_COLS;
-        log.info("Screen size: {} x {}, tile size: {}", screenH, screenW, tileSize);
+        int screentileW = tileSize * Universe.U_TILE_COLS;
+        log.info("Screen size: {} x {}, tile size: {}", screenH, screentileW, tileSize);
 
         this.screenTile = screenH / Universe.U_TILE_ROWS;
         renderer = new MapRenderer(tileset, universe.getMap().getTilewidth(), universe.getMap().getTileheight(), screenTile);
 
-        screen = new BufferedImage(screenW, screenH, BufferedImage.TYPE_INT_RGB);
-        setPreferredSize(new Dimension(screenW, screenH));
+        screen = new BufferedImage(screentileW, screenH, BufferedImage.TYPE_INT_RGB);
+        setPreferredSize(new Dimension(screentileW, screenH));
 
         // 🔽 Inizializza il player
         this.player = new Player(universe);
@@ -113,7 +113,7 @@ public class DKvsMario extends JPanel implements Runnable {
         renderer = new MapRenderer(tileset, universe.getMap().getTilewidth(), universe.getMap().getTileheight(), screenTile);
 
         screen = new BufferedImage(screenW, screenH, BufferedImage.TYPE_INT_RGB);
-        setPreferredSize(new Dimension(screenW, screenH));
+        setPreferredSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize()));
 
         // 🔽 Inizializza il player
         this.player = new Player(universe);

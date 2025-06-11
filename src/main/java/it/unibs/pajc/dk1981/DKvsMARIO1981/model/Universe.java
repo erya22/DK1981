@@ -13,6 +13,8 @@ public class Universe {
 	private static final Logger log = LoggerFactory.getLogger(Universe.class);
 	
 	public static int TILE_SIZE;
+	public static int LARGHEZZA_SCHERMO;
+	public static int LUNGHEZZA_SCHERMO;
 	
 	//SCREEN SETTINGS
 	//TODO DIMENSIONE DELLO SCHERMO.

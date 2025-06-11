@@ -1,10 +1,13 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -83,6 +86,14 @@ public class GameApp {
 //		});
 //		resizeTimer.setRepeats(false);
 		
+		 frame.addComponentListener(new ComponentAdapter() {
+			    public void componentResized(ComponentEvent evt) {
+			    	gamePanel.setBackground(Color.black);
+			        gamePanel.setPreferredSize(frame.getSize());
+			        gamePanel.repaint();
+			    }
+			});
+		 
 //		frame.addComponentListener(new java.awt.event.ComponentAdapter() {
 //		    public void componentResized(java.awt.event.ComponentEvent evt) {
 //		    	Universe.TILE_SIZE = frame.getContentPane().getHeight() / DKvsMario.getMapHeightTiles();
@@ -102,9 +113,10 @@ public class GameApp {
         
 //        log.info("tileSize {}, panelWidth {}, panelHeight {}", tileSize, panelWidth, panelHeight);
         
-        gamePanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
-        frame.setContentPane(gamePanel);
+        gamePanel.setPreferredSize(frame.getSize());
+        frame.getContentPane().add(gamePanel);
         frame.pack();
+        
         
      // Calcola dimensioni minime basate su tileSize = 10
 //        Insets insets = frame.getInsets();
