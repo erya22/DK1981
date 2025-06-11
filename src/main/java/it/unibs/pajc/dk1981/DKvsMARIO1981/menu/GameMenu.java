@@ -27,7 +27,7 @@ public class GameMenu extends JFrame {
 
     public GameMenu(Runnable onStart) {
         this.onStart = onStart;
-        setTitle("DK vs Mario - Menu");
+        setTitle("DK VS MARIO - Menu");
         GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         this.setUndecorated(true); // Rimuove i bordi
         device.setFullScreenWindow(this);

@@ -53,7 +53,7 @@ public class GameApp {
 		
 		Rectangle screenBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		int screenHeight = screenBounds.height - 50; // Altezza disponibile meno 50 pixel
-		Universe.TILE_SIZE = screenHeight / DKvsMario.getMapHeightTiles();
+//		Universe.TILE_SIZE = screenHeight / Universe.U_TILE_ROWS;
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false); //TODO DA METTERE TRUE
@@ -105,7 +105,7 @@ public class GameApp {
 //		int maxWidth = usableBounds.width;
 		
         //Tile size massimo per farci stare tutta la mappa + 50px in fondo
-        Universe.TILE_SIZE = (maxHeight - 50) / DKvsMario.getMapHeightTiles();
+//        Universe.TILE_SIZE = (maxHeight - 50) / DKvsMario.getMapHeightTiles();
         this.tileSize = Universe.TILE_SIZE;
         setPanelWidth(this.tileSize * DKvsMario.getMapWidthTiles());
         setPanelHeight(this.tileSize * DKvsMario.getMapHeightTiles());
@@ -154,8 +154,8 @@ public class GameApp {
 		 Rectangle usableBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		 int maxHeight = usableBounds.height;
 		 
-		 int tileSize = frame.getContentPane().getHeight() / DKvsMario.getMapHeightTiles(); 
-		 Universe.TILE_SIZE = tileSize;
+//		 int tileSize = frame.getContentPane().getHeight() / DKvsMario.getMapHeightTiles(); 
+//		 Universe.TILE_SIZE = tileSize;
 
 		
 		Timer resizeTimer = new Timer(200, e -> {
@@ -180,7 +180,7 @@ public class GameApp {
 		
 		frame.addComponentListener(new java.awt.event.ComponentAdapter() {
 		    public void componentResized(java.awt.event.ComponentEvent evt) {
-		    	Universe.TILE_SIZE = frame.getContentPane().getHeight() / DKvsMario.getMapHeightTiles();
+//		    	Universe.TILE_SIZE = frame.getContentPane().getHeight() / DKvsMario.getMapHeightTiles();
 		    	gamePanel.updateSize(Universe.TILE_SIZE);
 		    	resizeTimer.restart();
 		    }

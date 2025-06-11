@@ -3,8 +3,11 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class Entity {
-	
+	private static final Logger log = LoggerFactory.getLogger(Entity.class);
 	private final String name;
 	
 	private int x, y;
@@ -30,11 +33,14 @@ public abstract class Entity {
 
 	public void setX(int x) {
 		if (x < 0) return;
+		log.info("Set x{}", x);
+		if (x == 0) { log.info("Zero", new RuntimeException("Zero")); throw new RuntimeException("Zero"); }
 		this.x = x;
 	}
 	
 	public int addX(int addendo) {
 		this.x += addendo;
+		log.info("Set x{}", x);
 		return this.x;
 	}
 
@@ -44,11 +50,13 @@ public abstract class Entity {
 
 	public void setY(int y) {
 		if (y < 0) return;
+		log.info("Set y{}", y);
 		this.y = y;
 	}
 	
 	public int addY(int addendo) {
 		this.y += addendo;
+		log.info("Set y{}", y);
 		return this.y;
 	}
 

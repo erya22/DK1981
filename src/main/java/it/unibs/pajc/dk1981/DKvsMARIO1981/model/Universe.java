@@ -1,5 +1,6 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.model;
 
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class Universe {
 
 	public Universe() {
 		super();
+		Universe.TILE_SIZE = Toolkit.getDefaultToolkit().getScreenSize().height / Universe.U_TILE_ROWS;
 		this.player = new Player(this);
 		
 		this.map = TileMapLoader.loadMap();

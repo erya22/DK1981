@@ -6,12 +6,16 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JComponent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.MovementState;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.State;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 
 public class PlayerView extends JComponent{
+	private static final Logger log = LoggerFactory.getLogger(PlayerView.class);
 	private Player model;
 	
 	public PlayerView(Player model) {
@@ -49,7 +53,8 @@ public class PlayerView extends JComponent{
     	
     	
     	if (image != null) {
-    		g2.drawImage(image, model.getScreenX(), model.getScreenY(), Universe.TILE_SIZE, Universe.TILE_SIZE, null);
+    		g2.drawImage(image, model.getX(), model.getY(), Universe.TILE_SIZE, Universe.TILE_SIZE, null);
+    		log.info("X{} Y{} sz{}", model.getX(), model.getY(), Universe.TILE_SIZE);
         }
     	animate();
 	}

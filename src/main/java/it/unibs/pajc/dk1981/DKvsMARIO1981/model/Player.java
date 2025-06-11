@@ -45,9 +45,11 @@ public class Player extends Entity{
 	}
 
 	public void setDefaultValues() {
+		log.info("UNIV TILESZ: {}", Universe.TILE_SIZE);
 		this.setDirection("right");
-		this.setX(32); 
-		this.setY(22*32 + 3);
+		this.setX(2 * Universe.TILE_SIZE); 
+		this.setY(31 * Universe.TILE_SIZE);
+		
 		setyVelocity(0);
 		this.setSpeedX(4);
 		this.setSpeedY(4);

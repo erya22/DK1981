@@ -59,8 +59,9 @@ public class MapRenderer extends JPanel {
                     if (tileId > 0) {
                     	BufferedImage tileImage = tiles[tileId - 1]; // Tiled uses 1-based index
 //                    	int tileSize = tileImage.getWidth(); // poiché l'immagine è stata ridimensionata a tileSize x tileSize
-                    	g.drawImage(tileImage, x * Universe.TILE_SIZE + offsetX, y * Universe.TILE_SIZE + offsetY, 
-                                Universe.TILE_SIZE, Universe.TILE_SIZE, null);log.info("tile size nel renderer: {}", Universe.TILE_SIZE, null);
+                    	g.drawImage(tileImage, x * Universe.TILE_SIZE, y * Universe.TILE_SIZE, 
+                                Universe.TILE_SIZE, Universe.TILE_SIZE, null);
+//                    	log.info("tile size nel renderer: {}", Universe.TILE_SIZE, null);
                     }
                 }
             }
