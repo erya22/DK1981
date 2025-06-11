@@ -1,15 +1,21 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.menu;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GUIUtils;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import it.unibs.pajc.dk1981.DKvsMARIO1981.audio.AudioManager;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GUIUtils;
 
 public class GameMenu extends JFrame {
 
@@ -27,7 +33,10 @@ public class GameMenu extends JFrame {
         setResizable(true);
 
         GUIUtils.applyIcon(this);
-
+        
+        AudioManager.pauseBackgroundMusic(); // ferma temporaneamente la musica di gioco
+        AudioManager.playOneShotMusic("/MUSIC/howhigh.wav"); // suona una volta la musica del menu
+        
         // Carica immagine del title
         try {
             titleImage = ImageIO.read(getClass().getResource("/MENU/Title.png"));
@@ -111,11 +120,12 @@ public class GameMenu extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 dispose(); // Chiudi il menu
-
                 
                 if (onStart != null) {
                     onStart.run(); // Lancia il gioco passato da fuori (single o multi)
                 }
+
+                AudioManager.playBackgroundMusic("/MUSIC/bacmusic.wav");
             }
         });
 

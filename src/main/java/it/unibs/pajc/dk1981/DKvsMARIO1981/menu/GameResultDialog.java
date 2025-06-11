@@ -1,6 +1,9 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.menu;
 
 import javax.swing.*;
+
+import it.unibs.pajc.dk1981.DKvsMARIO1981.audio.AudioManager;
+
 import java.awt.*;
 
 public class GameResultDialog extends JDialog {
@@ -11,12 +14,16 @@ public class GameResultDialog extends JDialog {
     // costruttore per dialog singleplayer
     public GameResultDialog(Window owner, int playerScore) {
         super(owner, "Game Over", ModalityType.APPLICATION_MODAL);
+        AudioManager.pauseBackgroundMusic();
+        AudioManager.playOneShotMusic("/MUSIC/win1.wav"); 
         initSinglePlayerUI(playerScore);
     }
 
     // costruttore per dialog multiplayer
     public GameResultDialog(Window p1, Window p2, int p1Score, int p2Score, String winner) {
         super(p1, "Game Over", ModalityType.APPLICATION_MODAL);
+        AudioManager.pauseBackgroundMusic();
+        AudioManager.playOneShotMusic("/MUSIC/win1.wav"); 
         this.player1Window = p1;
         this.player2Window = p2;
         initUI(p1Score, p2Score, winner);
@@ -81,6 +88,7 @@ public class GameResultDialog extends JDialog {
         yesButton.setForeground(Color.WHITE);
         yesButton.setFocusPainted(false);
         yesButton.addActionListener(e -> {
+        	AudioManager.pauseBackgroundMusic();
             dispose();
             if (owner != null) {
                 owner.dispose(); // Chiude la finestra principale del gioco
@@ -183,6 +191,7 @@ public class GameResultDialog extends JDialog {
         yesButton.setForeground(Color.WHITE);
         yesButton.setFocusPainted(false);
         yesButton.addActionListener(e -> {
+        	AudioManager.pauseBackgroundMusic();
             dispose(); // Chiude il dialog
             if (player1Window != null) player1Window.dispose();
             if (player2Window != null) player2Window.dispose();
