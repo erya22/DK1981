@@ -29,6 +29,7 @@ public class DKView {
 			 int width = image.getWidth();
 			 int drawWidth = 0;
 			 int drawHeight = 0;
+			 //WIDTH E HEIGHT DEVONO ESSERE IN ENTITY?
 			 g2.drawImage(image, model.getX(), model.getY(), width, height, null); 
 		 }
 		 

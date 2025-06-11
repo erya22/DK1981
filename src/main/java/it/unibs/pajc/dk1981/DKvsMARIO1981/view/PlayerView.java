@@ -9,6 +9,7 @@ import javax.swing.JComponent;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.MovementState;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.State;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 
 public class PlayerView extends JComponent{
 	private Player model;
@@ -22,7 +23,7 @@ public class PlayerView extends JComponent{
 		BufferedImage image;
 
     	if (model.getState() == State.HIT) {
-            int frameIndex = (int) ((System.currentTimeMillis() - model.getHitStartTime()) / (model.getHitDuration() / 5));
+            int frameIndex = (int) ((System.currentTimeMillis() - model.getHitStartTime()) / (model.getHIT_DURATION() / 5));
             frameIndex = Math.min(frameIndex, 4); // evita IndexOutOfBounds
             BufferedImage[] hitFrames = model.getSpriteMap().get("hit");
             image = hitFrames != null ? hitFrames[frameIndex] : null;
@@ -45,9 +46,10 @@ public class PlayerView extends JComponent{
             }
             image = frames[(model.getSpriteNum() - 1) % frames.length];
         }
-
+    	
+    	
     	if (image != null) {
-            g2.drawImage(image, model.getX(), model.getY(), model.getTileSize(), model.getTileSize(), null);
+    		g2.drawImage(image, model.getScreenX(), model.getScreenY(), Universe.TILE_SIZE, Universe.TILE_SIZE, null);
         }
     	animate();
 	}
@@ -69,5 +71,10 @@ public class PlayerView extends JComponent{
 			 model.setSpriteCounter(0);     // <- resetta il contatore
 		 }	    
 	 }
-
+	 
+	 @Override
+		protected void paintComponent(Graphics g) {
+		    super.paintComponent(g);
+		    draw(g);  
+		}
 }

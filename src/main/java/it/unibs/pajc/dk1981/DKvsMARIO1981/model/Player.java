@@ -17,11 +17,11 @@ public class Player extends Entity{
 	private final int gravity = 1;
 	private final int moveSpeed = 4;
 	
-	private int yVelocity;
+	private int yVelocity = 12;
 	private int xVelocity;
 	
+	private int frameIndex = (int) ((System.currentTimeMillis() - this.getHIT_DURATION()) / (this.getHIT_DURATION() / 5));
 	
-
 	//STATO DI GIOCO
 	private State state;
 	private MovementState movement;
@@ -44,13 +44,12 @@ public class Player extends Entity{
 
 	public void setDefaultValues() {
 		this.setDirection("right");
-		this.setX(24 * 3); 
-		this.setY(24 * 30 - 8);
+		this.setX(32); 
+		this.setY(22*32 + 3);
 		setyVelocity(0);
 		this.setSpeedX(4);
 		this.setSpeedY(4);
 		this.setSpriteMap(new HashMap<>());
-		this.setTileSize(32);
 		setTerrain(Terrain.BEAM);
 		setMovement(MovementState.IDLE);
 		setState(State.ALIVE);
@@ -105,18 +104,15 @@ public class Player extends Entity{
             e.printStackTrace();
         }
     }
-
-	public int getJumpSpeed() {
-		return jumpStrenght;
-	}
-
 	
-
-	public int getGravitySpeed() {
-		return gravity;
+	public int getFrameIndex() {
+		return frameIndex;
 	}
 
-
+	public void addyVelocity(int adder) {
+		this.yVelocity += adder;
+	}
+	
 	public int getyVelocity() {
 		return yVelocity;
 	}
@@ -124,9 +120,13 @@ public class Player extends Entity{
 	public void setyVelocity(int yVelocity) {
 		this.yVelocity = yVelocity;
 	}
-	
-	public void addyVelocity(int adder) {
-		this.yVelocity += adder;
+
+	public int getxVelocity() {
+		return xVelocity;
+	}
+
+	public void setxVelocity(int xVelocity) {
+		this.xVelocity = xVelocity;
 	}
 
 	public State getState() {
@@ -145,6 +145,14 @@ public class Player extends Entity{
 		this.movement = movement;
 	}
 
+	public Terrain getTerrain() {
+		return terrain;
+	}
+
+	public void setTerrain(Terrain terrain) {
+		this.terrain = terrain;
+	}
+
 	public int getVite() {
 		return vite;
 	}
@@ -161,11 +169,6 @@ public class Player extends Entity{
 		this.invincibleTime = invincibleTime;
 	}
 
-	public int getImmunity() {
-		return IMMUNITY;
-	}
-
-
 	public long getHitStartTime() {
 		return hitStartTime;
 	}
@@ -174,32 +177,12 @@ public class Player extends Entity{
 		this.hitStartTime = hitStartTime;
 	}
 
-	public long getHitDuration() {
-		return HIT_DURATION;
+	public static Logger getLog() {
+		return log;
 	}
 
-	public int getIMMUNITY() {
-		return IMMUNITY;
-	}
-
-	public long getHIT_DURATION() {
-		return HIT_DURATION;
-	}
-
-	public Terrain getTerrain() {
-		return terrain;
-	}
-
-	public void setTerrain(Terrain terrain) {
-		this.terrain = terrain;
-	}
-
-	public int getxVelocity() {
-		return xVelocity;
-	}
-
-	public void setxVelocity(int xVelocity) {
-		this.xVelocity = xVelocity;
+	public static int getBaseTile() {
+		return BASE_TILE;
 	}
 
 	public int getJumpStrenght() {
@@ -214,6 +197,14 @@ public class Player extends Entity{
 		return moveSpeed;
 	}
 
+	public int getIMMUNITY() {
+		return IMMUNITY;
+	}
+
+	public long getHIT_DURATION() {
+		return HIT_DURATION;
+	}
+
 	public void climb(MovementState movement) {
 		this.setMovement(movement);
 		log.info("x{} y{}", this.getX(), this.getY());
@@ -221,17 +212,17 @@ public class Player extends Entity{
 		if (this.getMovement() == MovementState.UPCLIMB) {
 			if (getTerrain() == Terrain.LADDER) {
 				this.addY(-this.getSpeedY());
-				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().U_TILE_SIZE);
 				if (newY != -1) {
 					this.setY(newY);
 				} else {
-					newY = this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize());
+					newY = this.getUniverse().findBeam(getX(), getY(), getUniverse().U_TILE_SIZE);
 					this.setTerrain(Terrain.BEAM);
 					this.setMovement(MovementState.IDLE);
 				}
 					
 			} else {
-				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().U_TILE_SIZE);
 				if (newY != -1) {
 					this.setTerrain(Terrain.LADDER);
 					this.setY(newY);
@@ -240,17 +231,17 @@ public class Player extends Entity{
 		} else if (this.getMovement() == MovementState.DOWNCLIMB) {
 			if (getTerrain() == Terrain.LADDER) {
 				this.addY(this.getSpeedY());
-				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().U_TILE_SIZE);
 				if (newY != -1) {
 					this.setY(newY);
 				} else {
-					newY = this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize());
+					newY = this.getUniverse().findBeam(getX(), getY(), getUniverse().U_TILE_SIZE);
 					this.setTerrain(Terrain.BEAM);
 					this.setMovement(MovementState.IDLE);
 				}
 					
 			} else {
-				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().getTileSize());
+				int newY = this.getUniverse().findLadder(getX(), getY(), getUniverse().U_TILE_SIZE);
 				if (newY != -1) {
 					this.setTerrain(Terrain.LADDER);
 					this.setY(newY);
@@ -265,10 +256,10 @@ public class Player extends Entity{
 		setMovement(MovementState.WALKING);
 		if (direction.equals("left")) {
             this.addX(-this.getSpeedX());
-            this.setY(this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize()));
+            this.setY(this.getUniverse().findBeam(getX(), getY(), getUniverse().U_TILE_SIZE));
         } else if (direction.equals("right")) {
             this.addX(this.getSpeedX());
-            this.setY(this.getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize()));
+            this.setY(this.getUniverse().findBeam(getX(), getY(), getUniverse().U_TILE_SIZE));
         }
 	}
 
@@ -291,13 +282,17 @@ public class Player extends Entity{
 	}
 	
 	public void updatePhysics() {
+		
+		
 	    if (getTerrain() == Terrain.AIR || getMovement() == MovementState.JUMPING) {
 	        addyVelocity(gravity); 
 	        int newY = getY() + yVelocity;
 	        int newX = getX() + xVelocity;
-
-	        int beamY = getUniverse().findBeam(getX(), getY(), getUniverse().getTileSize());
-
+	        
+	        log.info("Ricerca beam → x: {}, y: {}", getX(), getY());
+	        int beamY = getUniverse().findBeam(getX(), getY(), getUniverse().U_TILE_SIZE);
+	        log.info("Risultato beamY: {}", beamY);
+	        
 	        if (beamY != -1 && getyVelocity() > 0 && beamY < newY) {
 	            setY(beamY);
 	            setMovement(MovementState.IDLE);
@@ -305,6 +300,7 @@ public class Player extends Entity{
 	            setyVelocity(0); 
 	            setxVelocity(0);
 	        } else {
+	        	log.warn("Beam non trovata, continuando movimento");
 	            setY(newY);
 	            setX(newX);
 	        }
@@ -328,6 +324,8 @@ public class Player extends Entity{
 		}
 		
 	}
+
+	
 
 	
 	

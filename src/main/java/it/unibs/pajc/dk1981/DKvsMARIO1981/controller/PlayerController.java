@@ -57,11 +57,11 @@ public class PlayerController implements KeyListener, MouseListener, MouseMotion
     public void update(float deltaTime) {
     	if (player.getState() == State.DEAD || player.getState() == State.HIT) return;
     	
-    	player.updatePhysics();
+//    	player.updatePhysics();
     	
     	if (player.getState() == State.INVINCIBLE) {
             long elapsed = System.currentTimeMillis() - player.getInvincibleTime();
-            if (elapsed >= player.getImmunity()) {
+            if (elapsed >= player.getIMMUNITY()) {
                 player.setState(State.ALIVE); 
             }
     	}
@@ -108,7 +108,10 @@ public class PlayerController implements KeyListener, MouseListener, MouseMotion
 	public void mouseClicked(java.awt.event.MouseEvent e) {
 	    int x = e.getX();
 	    int y = e.getY();
-	    log.info("Mouse clicked at: x={}, y={}}", x, y);
+	    int xU = ( x * 32 ) / player.getUniverse().U_TILE_SIZE;
+	    int yU = ( y * 32 ) / player.getUniverse().U_TILE_SIZE;
+//	    log.info("Mouse clicked at: x={}({}), y={}({})", x, xU, y, yU);
+	    player.getUniverse().debugTablesPart("{}", xU, yU);
 	}
 
 

@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import it.unibs.pajc.dk1981.DKvsMARIO1981.DKvsMario;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.GameApp;
 
 public class GameWindow extends JFrame {
 
@@ -24,8 +25,8 @@ public class GameWindow extends JFrame {
 
         add(gamePanel);
 
-        int initialTileSize = getContentPane().getWidth() / MAP_WIDTH_TILES;
-        gamePanel.updateSize(initialTileSize);
+//        int initialTileSize = getContentPane().getWidth() / MAP_WIDTH_TILES;
+//        gamePanel.updateSize(initialTileSize);
 
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,7 +34,7 @@ public class GameWindow extends JFrame {
 
 
         // Limiti dimensioni minime
-        int minTileSize = 8; // es.
+        int minTileSize = GameApp.getMinTileSize(); // es.
         int minWidth = MAP_WIDTH_TILES * minTileSize;
         int minHeight = MAP_HEIGHT_TILES * minTileSize;
 

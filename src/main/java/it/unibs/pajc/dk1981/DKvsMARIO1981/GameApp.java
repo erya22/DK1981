@@ -14,10 +14,22 @@ import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
+
 public class GameApp {
 	private static final Logger log = LoggerFactory.getLogger(GameApp.class);
+	
+	
+	private static int minTileSize = 10;
+    private static int minWidth = minTileSize * DKvsMario.getMapWidthTiles();
+    private static int minHeight = minTileSize * DKvsMario.getMapHeightTiles();
+    int maxHeight;
+    int tileSize = (maxHeight - 50) / DKvsMario.getMapHeightTiles();
+    int panelWidth = tileSize * DKvsMario.getMapWidthTiles();
+    int panelHeight = tileSize * DKvsMario.getMapHeightTiles();
 
 	private JFrame frame;
+	DKvsMario gamePanel;
 
 	/**
 	 * Launch the application.
@@ -47,9 +59,8 @@ public class GameApp {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-
-		DKvsMario gamePanel = new DKvsMario();
-		frame = new JFrame("DK VS MARIO ARCADE VERSION 1981");
+		this.gamePanel = new DKvsMario();
+		this.frame = new JFrame("DK VS MARIO ARCADE VERSION 1981");
 		try {
 			frame.setIconImage(ImageIO.read(getClass().getResource("/PLAYER/a1.png")));
 		} catch (IOException e) {
@@ -59,20 +70,28 @@ public class GameApp {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(true); //TODO DA METTERE TRUE
 		
+		 Rectangle usableBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		 int maxHeight = usableBounds.height;
+		 
+		 int tileSize = frame.getContentPane().getHeight() / DKvsMario.getMapHeightTiles(); 
+		 Universe.TILE_SIZE = tileSize;
+
+		
 		Timer resizeTimer = new Timer(200, e -> {
 		    Dimension size = frame.getContentPane().getSize(); // dimensioni effettive dell'area disponibile
-		    int tileW = size.width / 28;
-		    int tileH = size.height / 32;
+		    int tileW = size.width / DKvsMario.getMapWidthTiles();
+		    int tileH = size.height / DKvsMario.getMapHeightTiles();
 		    int newTileSize = Math.min(tileW, tileH);
 
-		    int mapWidth = newTileSize * 28;
-		    int mapHeight = newTileSize * 32;
+		    int mapWidth = newTileSize * DKvsMario.getMapWidthTiles();
+		    int mapHeight = newTileSize * DKvsMario.getMapHeightTiles();
 
-		    gamePanel.setTileSize(newTileSize);
+		    gamePanel.updateSize(newTileSize);
 		    gamePanel.setPreferredSize(new Dimension(mapWidth, mapHeight));
 
 		    frame.getContentPane().setPreferredSize(new Dimension(size.width, size.height));
 		    frame.pack(); // forza il ridimensionamento del frame
+		    
 		    
 		    gamePanel.repaint();
 		});
@@ -80,47 +99,89 @@ public class GameApp {
 		
 		frame.addComponentListener(new java.awt.event.ComponentAdapter() {
 		    public void componentResized(java.awt.event.ComponentEvent evt) {
-		        resizeTimer.restart();
+		    	Universe.TILE_SIZE = frame.getContentPane().getHeight() / DKvsMario.getMapHeightTiles();
+		    	gamePanel.updateSize(Universe.TILE_SIZE);
+		    	resizeTimer.restart();
 		    }
 		});
 		
-		Rectangle usableBounds = GraphicsEnvironment
-		            .getLocalGraphicsEnvironment()
-		            .getMaximumWindowBounds();
-		 
-		int maxHeight = usableBounds.height;
-        int tileCols = 28;
-        int tileRows = 32;  // es. 32
- 
+//		int maxWidth = usableBounds.width;
+		
         //Tile size massimo per farci stare tutta la mappa + 50px in fondo
-        int tileSize = (maxHeight - 50) / tileRows;
-        int panelWidth = tileSize * tileCols;
-        int panelHeight = tileSize * tileRows;
-     
-        gamePanel.setTileSize(tileSize);// Aggiungi un setTileSize(int) nel DKvsMario se necessario
+        this.tileSize = (maxHeight - 50) / DKvsMario.getMapHeightTiles();
+        setPanelWidth(tileSize * DKvsMario.getMapWidthTiles());
+        setPanelHeight(tileSize * DKvsMario.getMapHeightTiles());
+        gamePanel.updateSize(this.tileSize);
+        
+//        log.info("tileSize {}, panelWidth {}, panelHeight {}", tileSize, panelWidth, panelHeight);
+        
         gamePanel.setPreferredSize(new Dimension(panelWidth, panelHeight));
         frame.setContentPane(gamePanel);
         frame.pack();
         
      // Calcola dimensioni minime basate su tileSize = 10
-        int minTileSize = 10;
-        int minWidth = minTileSize * 28;
-        int minHeight = minTileSize * 32;
-
         Insets insets = frame.getInsets();
         int minFrameWidth = minWidth + insets.left + insets.right;
         int minFrameHeight = minHeight + insets.top + insets.bottom;
 
+        
         // Imposta dimensione minima
         frame.setMinimumSize(new Dimension(minFrameWidth, minFrameHeight));
-		
-		
       
         // Imposta dimensione finestra
         frame.setLocationRelativeTo(null); // centra la finestra
         frame.setVisible(true);
+
+        gamePanel.updateSize(this.tileSize);
         
 		gamePanel.start();
 	}
 
+	public static int getMinTileSize() {
+		return minTileSize;
+	}
+
+	public static int getMinWidth() {
+		return minWidth;
+	}
+
+	public static int getMinHeight() {
+		return minHeight;
+	}
+
+	public int getMaxHeight() {
+		return maxHeight;
+	}
+
+	public void setMaxHeight(int maxHeight) {
+		this.maxHeight = maxHeight;
+	}
+
+	public int getTileSize() {
+		return tileSize;
+	}
+
+	public void setTileSize(int tileSize) {
+		this.tileSize = tileSize;
+	}
+
+	public int getPanelWidth() {
+		return panelWidth;
+	}
+
+	public void setPanelWidth(int panelWidth) {
+		this.panelWidth = panelWidth;
+	}
+
+	public int getPanelHeight() {
+		return panelHeight;
+	}
+
+	public void setPanelHeight(int panelHeight) {
+		this.panelHeight = panelHeight;
+	}	
+	
+	public int calculateTileSize() {
+		return getPanelHeight() / DKvsMario.getMapHeightTiles();
+	}
 }

@@ -6,14 +6,15 @@ import java.util.HashMap;
 public abstract class Entity {
 	
 	private final String name;
-	private double worldX, y;
-	private int speedX, speedY;
 	
+	private int x, y;
+	private int speedX, speedY;
 	private String direction;
+	
 	private int spriteCounter;
 	private int spriteNum = 1;
 	private HashMap<String, BufferedImage[]> spriteMap;
-	private int tileSize;
+	
 	private Universe universe;
 	
 	public Entity(Universe universe, String name) {
@@ -28,6 +29,7 @@ public abstract class Entity {
 	}
 
 	public void setX(int x) {
+		if (x < 0) return;
 		this.x = x;
 	}
 	
@@ -41,6 +43,7 @@ public abstract class Entity {
 	}
 
 	public void setY(int y) {
+		if (y < 0) return;
 		this.y = y;
 	}
 	
@@ -97,14 +100,6 @@ public abstract class Entity {
 		this.spriteMap = spriteMap;
 	}
 
-	public int getTileSize() {
-		return tileSize;
-	}
-
-	public void setTileSize(int tileSize) {
-		this.tileSize = tileSize;
-	}
-
 	public Universe getUniverse() {
 		return universe;
 	}
@@ -116,5 +111,17 @@ public abstract class Entity {
 	public String getName() {
 		return name;
 	}
+	
+	public int getScreenX() {
+		
+		return (int) (getX() * Universe.SCALE_FACTOR);
+	}
+	
+	public int getScreenY() {
+		return (int) (getY() * Universe.SCALE_FACTOR);
+	}
+
+	
+	
 	
 }

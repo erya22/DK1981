@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import it.unibs.pajc.dk1981.DKvsMARIO1981.controller.GameEngine;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.controller.PlayerController;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
@@ -15,11 +18,8 @@ import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.view.MapRenderer;
 
 public class DKvsMario extends JPanel implements Runnable {
-	
-	 private static final int MAP_WIDTH_TILES = 28;
-	 private static final int MAP_HEIGHT_TILES = 32;
-	 private static final double ASPECT_RATIO = (double) MAP_WIDTH_TILES / MAP_HEIGHT_TILES;
-
+	private static final Logger log = LoggerFactory.getLogger(DKvsMario.class);
+	public static final double ASPECT_RATIO = (double) Universe.U_TILE_COLS / Universe.U_TILE_ROWS;
 	
 	private GameEngine engine = new GameEngine();
 	private Universe universe = engine.getUniverse();
@@ -29,21 +29,24 @@ public class DKvsMario extends JPanel implements Runnable {
     
  // Tile size variabile in base alla dimensione del pannello
     private int tileSize;
+    private int screenTile;
     
     private PlayerController controller;
     private Player player;
 
-
     
     public DKvsMario() {
         setDoubleBuffered(true);
-        this.tileSize = 32;
+         
         // Inizializza mappa e renderer
         BufferedImage tileset = TileMapLoader.loadTileset();
-        renderer = new MapRenderer(tileset, universe.getMap().getTilewidth(), universe.getMap().getTileheight(), tileSize);
+        
+        int screenW = Universe.U_TILE_SIZE * Universe.U_TILE_COLS;
+        int screenH = Universe.U_TILE_SIZE * Universe.U_TILE_ROWS;
+        
+        this.screenTile = screenH / Universe.U_TILE_ROWS;
+        renderer = new MapRenderer(tileset, universe.getMap().getTilewidth(), universe.getMap().getTileheight(), screenTile);
 
-        int screenW = tileSize * MAP_WIDTH_TILES;
-        int screenH = tileSize * MAP_HEIGHT_TILES;
         screen = new BufferedImage(screenW, screenH, BufferedImage.TYPE_INT_RGB);
         setPreferredSize(new Dimension(screenW, screenH));
 
@@ -66,11 +69,9 @@ public class DKvsMario extends JPanel implements Runnable {
      */
     public void updateSize(int tileSize) {
     	this.tileSize = tileSize;
-    	System.out.println("Dimensione attuale della tile: " + tileSize);
-        int screenW = tileSize * MAP_WIDTH_TILES;
-        int screenH = tileSize * MAP_HEIGHT_TILES;
+        int screenW = tileSize * Universe.U_TILE_COLS;
+        int screenH = tileSize * Universe.U_TILE_ROWS;
         screen = new BufferedImage(screenW, screenH, BufferedImage.TYPE_INT_RGB);
-        renderer.setTileSize(tileSize);
         setPreferredSize(new Dimension(screenW, screenH));
         revalidate();
         repaint();
@@ -116,12 +117,15 @@ public class DKvsMario extends JPanel implements Runnable {
 
     public void setTileSize(int tileSize) {
     	this.tileSize = tileSize;
-        renderer.setTileSize(tileSize); // se usi un renderer
-        screen = new BufferedImage(tileSize * 28, tileSize * 32, BufferedImage.TYPE_INT_RGB);
-        setPreferredSize(new Dimension(tileSize * 28, tileSize * 32));
+//    	log.info("Nuova tileSize {} nel setTileSize", tileSize);
+        screen = new BufferedImage(tileSize * Universe.U_TILE_COLS, tileSize * Universe.U_TILE_ROWS, BufferedImage.TYPE_INT_RGB);
+        setPreferredSize(new Dimension(tileSize * Universe.U_TILE_COLS, tileSize * Universe.U_TILE_ROWS));
         revalidate();
         repaint();
     }
+    public void updateTileSize() {
+    	Universe.TILE_SIZE = getHeight() /getMapHeightTiles();
+    	}
     
     public PlayerController getController() {
         return controller;
@@ -130,6 +134,94 @@ public class DKvsMario extends JPanel implements Runnable {
     public void start() {
 		new Thread(this).start();
 	}
+
+
+
+	public GameEngine getEngine() {
+		return engine;
+	}
+
+
+
+	public void setEngine(GameEngine engine) {
+		this.engine = engine;
+	}
+
+
+
+	public Universe getUniverse() {
+		return universe;
+	}
+
+
+
+	public void setUniverse(Universe universe) {
+		this.universe = universe;
+	}
+
+
+
+	public BufferedImage getScreen() {
+		return screen;
+	}
+
+
+
+	public void setScreen(BufferedImage screen) {
+		this.screen = screen;
+	}
+
+
+
+	public MapRenderer getRenderer() {
+		return renderer;
+	}
+
+
+
+	public void setRenderer(MapRenderer renderer) {
+		this.renderer = renderer;
+	}
+
+
+
+	public Player getPlayer() {
+		return player;
+	}
+
+
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
+
+
+	public static int getMapWidthTiles() {
+		return Universe.U_TILE_COLS;
+	}
+
+
+
+	public static int getMapHeightTiles() {
+		return Universe.U_TILE_ROWS;
+	}
+
+
+
+	public static double getAspectRatio() {
+		return ASPECT_RATIO;
+	}
+
+
+
+	public void setController(PlayerController controller) {
+		this.controller = controller;
+	}
+	
+	
+    
+    
 }
     
     

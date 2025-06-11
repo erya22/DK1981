@@ -7,14 +7,20 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import it.unibs.pajc.dk1981.DKvsMARIO1981.GameApp;
+
 public class Universe {
 	private static final Logger log = LoggerFactory.getLogger(Universe.class);
 	
-	//SCREEN SETTINGS
-	private final int TILECOL = 28;
-	private final int TILE_ROWS = 32;
+	public static int TILE_SIZE;
 	
-	private int tileSize = 32;
+	//SCREEN SETTINGS
+	//TODO DIMENSIONE DELLO SCHERMO.
+	public static final int U_TILE_COLS = 28;
+	public static final int U_TILE_ROWS = 32;
+	public static final int U_TILE_SIZE = 32;
+
+	public static double SCALE_FACTOR = (double) TILE_SIZE / U_TILE_SIZE;
 	
 	//ARCHIVIO IMMAGINI MAPPA
 	private TileMap map;
@@ -36,13 +42,15 @@ public class Universe {
 	public Universe() {
 		super();
 		this.player = new Player(this);
+		
 		this.map = TileMapLoader.loadMap();
-		this.ladders = MapParser.calcolaPixelScala(map.getLayers().get(0).getData());
-		this.beams = MapParser.calcolaPixelTrave(map.getLayers().get(1).getData());
+		this.ladders = MapParser.calcolaPixelScala(map.getLayers().get(1).getData());
+		this.beams = MapParser.calcolaPixelTrave(map.getLayers().get(0).getData());
 		this.tileset = TileMapLoader.loadTileset();
-		this.tiles = TileUtils.loadTiles(tileset, map.getTilewidth(), map.getTileheight(), 16);
+		//TODO: TILE
+		this.tiles = TileUtils.loadTiles(tileset, map.getTilewidth(), map.getTileheight(), U_TILE_SIZE);
 		
-		
+		debugTablesCompact(this.ladders, this.beams);
 	}
 	
 	private static void bresenhamLine(byte[][] mappa, byte val, int x0, int y0, int x1, int y1) {
@@ -125,14 +133,6 @@ public class Universe {
 		this.player = player;
 	}
 
-	public int getTileSize() {
-		return tileSize;
-	}
-
-	public void setTileSize(int tileSize) {
-		this.tileSize = tileSize;
-	}
-
 	public BufferedImage getTileset() {
 		return tileset;
 	}
@@ -150,35 +150,105 @@ public class Universe {
 	}
 
 	public int getTilecol() {
-		return TILECOL;
+		return U_TILE_COLS;
 	}
 
 	public int getTileRows() {
-		return TILE_ROWS;
-	}
-
-	public int findBeam(int x, int y, int tileSize) {
-		int xU = x * 32 / tileSize; 
-		int yU = y* 32 / tileSize;
-		for (int i = 0; i < this.beams.length; i++) {
-			for (int j = 0; j < this.beams[0].length; j++) {
-				if (this.beams[xU+16][yU+32]) return 1;
-			}
-		}
-		return -1;
+		return U_TILE_ROWS;
 	}
 	
-	public int findLadder(int x, int y, int tileSize) {
-		int xU = x * 32 / tileSize; 
-		int yU = y* 32 / tileSize;
+	
+	public int findBeam(int xU, int yU, int tileSize) {
+		debugTablesPart("beams: \n{}", xU, yU);
+
+		for (int x = xU - 10; x < this.beams.length; x++) {
+			try { if (this.beams[x][yU]) return x; } catch (Exception e) {}
+		}
+
+		return xU;
+	}
+
+	public int findLadder(int xU, int yU, int tileSize) {
+		debugTablesPart("ladders: \n{}", xU, yU);
 		
-		for (int i = 0; i < this.ladders.length; i++) {
-			for (int j = 0; j < this.ladders[0].length; j++) {
-				if (this.ladders[xU+16][yU+32]) return 1;
+		for (int deltaX = 0; deltaX < 20; deltaX++) {
+			for (int deltaY = 0; deltaY < 20; deltaY++) {
+				try { if (this.ladders[xU+deltaX][yU+deltaY]) return xU+deltaX; } catch (Exception e) {}
+				try { if (this.ladders[xU+deltaX][yU-deltaY]) return xU+deltaX; } catch (Exception e) {}
+				try { if (this.ladders[xU-deltaX][yU+deltaY]) return xU-deltaX; } catch (Exception e) {}
+				try { if (this.ladders[xU-deltaX][yU-deltaY]) return xU-deltaX; } catch (Exception e) {}
 			}
 		}
 		return -1;
 	}
 	
+	public static void debugTablesCompact(boolean[][] scale, boolean[][] travi) {
+		final int blockSize = 16;
+		int l = scale.length;
+	    int w = scale[0].length;
 
+	    int newL = (l + blockSize - 1) / blockSize; // numero righe dopo riduzione
+	    int newW = (w + blockSize - 1) / blockSize; // numero colonne dopo riduzione
+
+	    StringBuilder s = new StringBuilder();
+
+	    s.append("\n@");
+	    for (int c = 0; c < newW; c++) {
+	        s.append("_");
+	    }
+
+	    for (int r = 0; r < newL; r++) {
+	        s.append("|");
+	        for (int c = 0; c < newW; c++) {
+	            boolean scalePresent = false;
+	            boolean traviPresent = false;
+
+	            // Controllo il blocco blockSize x blockSize
+	            for (int rr = r * blockSize; rr < (r + 1) * blockSize && rr < l; rr++) {
+	                for (int cc = c * blockSize; cc < (c + 1) * blockSize && cc < w; cc++) {
+	                    if (scale[rr][cc]) scalePresent = true;
+	                    if (travi[rr][cc]) traviPresent = true;
+	                    if (scalePresent && traviPresent) break;
+	                }
+	                if (scalePresent && traviPresent) break;
+	            }
+
+	            if (scalePresent && traviPresent) {
+	                s.append("#");
+	            } else if (scalePresent) {
+	                s.append("=");
+	            } else if (traviPresent) {
+	                s.append("-");
+	            } else {
+	                s.append(" ");
+	            }
+	        }
+	        s.append("|\n");
+	    }
+
+	    log.info("{}", s);
+	}
+
+	public void debugTablesPart(String fmt, int xU, int yU) {
+		StringBuilder s = new StringBuilder("\n     ");
+		for (int r = xU - 7; r < xU + 7; r++) {
+			for (int c = yU - 7; c < yU + 7; c++) {
+				try {
+					if (this.ladders[r][c] && this.beams[r][c]) {
+						s.append("#");
+					} else if (this.ladders[r][c]) {
+						s.append("=");
+					} else if (this.beams[r][c]) {
+						s.append("_");
+					} else {
+						s.append(" ");
+					}
+				} catch (Exception e) {
+					s.append("!");					
+				}
+			}
+			s.append("\n     ");
+		}
+		log.info(fmt, s);
+	}
 }
