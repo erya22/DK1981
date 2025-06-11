@@ -1,4 +1,4 @@
-# Donkey KONG 1981
+# DONKEY KONG 1981
 
 **Autori:** Elisa Montanari(745975) & Arianna Andreatta(745436)
 **Università:** Unibs
@@ -9,7 +9,7 @@
 
 ## Descrizione del progetto
 
-**Donkey KONG 1981** è un videogioco sviluppato in Java, ispirato al classico arcade Donkey Kong. Il gioco è stato progettato seguendo i principi dell’**architettura MVC (Model-View-Controller)**, 
+**DONKEY KONG 1981** è un videogioco sviluppato in Java, ispirato al classico arcade Donkey Kong. Il gioco è stato progettato seguendo i principi dell’**architettura MVC (Model-View-Controller)**, 
 utilizza una comunicazione **Client-Server** per la modalità multiplayer, ed è dotato di una **interfaccia grafica (GUI)** interattiva e intuitiva per l’utente.
 
 Il progetto è un esercizio completo di programmazione strutturata e orientata agli oggetti, gestione di interfacce grafiche, e progettazione di sistemi distribuiti. 
