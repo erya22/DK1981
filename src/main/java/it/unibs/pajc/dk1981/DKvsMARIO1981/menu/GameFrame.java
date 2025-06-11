@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class GameFrame extends JFrame {
     public GameFrame() {
-        setTitle("Donkey Kong vs Mario - Game");
+        setTitle("DONKEY KONG VS MARIO - Game");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 

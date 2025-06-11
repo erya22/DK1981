@@ -74,7 +74,7 @@ public class GameResultDialog extends JDialog {
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBackground(Color.BLACK);
 
-        JLabel replayLabel = new JLabel("DO YOU WANT TO REPLAY?", SwingConstants.CENTER);
+        JLabel replayLabel = new JLabel("PLAY AGAIN?", SwingConstants.CENTER);
         replayLabel.setForeground(Color.WHITE);
         replayLabel.setFont(retroFont);
         bottomPanel.add(replayLabel, BorderLayout.NORTH);
@@ -177,7 +177,7 @@ public class GameResultDialog extends JDialog {
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBackground(Color.BLACK);
 
-        JLabel replayLabel = new JLabel("DO YOU WANT TO REPLAY?", SwingConstants.CENTER);
+        JLabel replayLabel = new JLabel("PLAY AGAIN?", SwingConstants.CENTER);
         replayLabel.setForeground(Color.WHITE);
         replayLabel.setFont(retroFont);
         bottomPanel.add(replayLabel, BorderLayout.NORTH);

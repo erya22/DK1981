@@ -25,6 +25,7 @@ import it.unibs.pajc.dk1981.DKvsMARIO1981.controller.PlayerController;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.menu.GameMenu;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.menu.GameResultDialog;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Player;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.model.State;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.TileMapLoader;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.model.Universe;
 import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GUIUtils;
@@ -420,12 +421,12 @@ public class DKvsMario extends JPanel implements Runnable {
      */
     private boolean checkGameOverCondition() {
         // Esempio: se player ha zero vite o livello completato
-        return true; //player.isDead() || gameMap.isLevelComplete(); per ora metto true per testare
+        return player.getState() == State.DEAD; //player.isDead() || gameMap.isLevelComplete(); per ora metto true per testare
     }
 
     /** Ritorna il punteggio finale del giocatore (adatta a come memorizzi il punteggio) */
     private int computeFinalScore() {
-        return 0;//player.getScore();
+        return player.getHighScore();//player.getScore();
     }
 
     /** In multiplayer “mappe separate” non serve inviare ogni input al server */

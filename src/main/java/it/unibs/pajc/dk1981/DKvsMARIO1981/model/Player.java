@@ -34,6 +34,8 @@ public class Player extends Entity{
 	
 	private long hitStartTime = 0;
 	private final long HIT_DURATION = 1500;
+	
+	private int highScore;
 
 	
 	public Player(Universe universe) {
@@ -50,13 +52,25 @@ public class Player extends Entity{
 		this.setSpeedX(4);
 		this.setSpeedY(4);
 		this.setSpriteMap(new HashMap<>());
+		this.setHighScore(0);
 		setTerrain(Terrain.BEAM);
 		setMovement(MovementState.IDLE);
 		setState(State.ALIVE);
 		
+		
 	}
 	
 	
+	
+
+	public int getHighScore() {
+		return highScore;
+	}
+
+	public void setHighScore(int highScore) {
+		this.highScore = highScore;
+	}
+
 	public void getEntityImage() {
 		HashMap<String, BufferedImage[]> spriteMap = this.getSpriteMap();
         try {
