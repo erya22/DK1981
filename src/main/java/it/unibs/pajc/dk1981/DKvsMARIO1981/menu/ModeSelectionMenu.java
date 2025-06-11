@@ -1,16 +1,28 @@
 package it.unibs.pajc.dk1981.DKvsMARIO1981.menu;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-
-import it.unibs.pajc.dk1981.DKvsMARIO1981.DKvsMario;
-import it.unibs.pajc.dk1981.DKvsMARIO1981.net.DKServer;
-import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GUIUtils;
-
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+
+import it.unibs.pajc.dk1981.DKvsMARIO1981.DKvsMario;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.GameApp;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.net.DKServer;
+import it.unibs.pajc.dk1981.DKvsMARIO1981.view.GUIUtils;
 
 public class ModeSelectionMenu extends JFrame {
     private BufferedImage titleImage;
@@ -118,14 +130,8 @@ public class ModeSelectionMenu extends JFrame {
         singleButton.addActionListener(e -> {
             dispose();
             new GameMenu(() -> {
-                JFrame gameFrame = new JFrame("DK vs Mario");
-                GUIUtils.applyIcon(gameFrame);
-                DKvsMario gamePanel = new DKvsMario();
-                gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                gameFrame.setContentPane(gamePanel);
-                gameFrame.pack();
-                gameFrame.setLocationRelativeTo(null);
-                gameFrame.setVisible(true);
+            	GameApp gameApp = new GameApp();
+				gameApp.initializesinglePlayer();
             });
         });
 
@@ -139,14 +145,8 @@ public class ModeSelectionMenu extends JFrame {
             }
             SwingUtilities.invokeLater(() -> {
                 new GameMenu(() -> {
-                    JFrame frame1 = new JFrame("Giocatore 1");
-                    GUIUtils.applyIcon(frame1);
-                    frame1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    DKvsMario game1 = new DKvsMario("localhost", 5555, "Player1");
-                    frame1.setContentPane(game1);
-                    frame1.pack();
-                    frame1.setLocationRelativeTo(null);
-                    frame1.setVisible(true);
+                	GameApp gameApp = new GameApp();
+                    gameApp.initializemultiPlayer("Player1");
                 });
             });
         });

@@ -3,6 +3,7 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -59,14 +60,17 @@ public class DKvsMario extends JPanel implements Runnable {
     private String playerTag; // es. "Player1" o "Player2"
     
     public DKvsMario() {
-        setDoubleBuffered(true);
-         
+    	setDoubleBuffered(true);
+        
         // Inizializza mappa e renderer
         BufferedImage tileset = TileMapLoader.loadTileset();
-        
-        int screenW = Universe.U_TILE_SIZE * Universe.U_TILE_COLS;
-        int screenH = Universe.U_TILE_SIZE * Universe.U_TILE_ROWS;
-        
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();        
+        int screenH = screenSize.height;
+        tileSize = screenH / Universe.U_TILE_ROWS;
+        int screenW = tileSize * Universe.U_TILE_COLS;
+        log.info("Screen size: {} x {}, tile size: {}", screenH, screenW, tileSize);
+
         this.screenTile = screenH / Universe.U_TILE_ROWS;
         renderer = new MapRenderer(tileset, universe.getMap().getTilewidth(), universe.getMap().getTileheight(), screenTile);
 

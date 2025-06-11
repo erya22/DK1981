@@ -47,28 +47,30 @@ public class GameWindow extends JFrame {
         setMaximumSize(new Dimension(maxWidth, maxHeight));
 
         // Listener per ridimensionamento finestra
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                Dimension size = getContentPane().getSize();
-
-                // Calcola dimensione mantenendo aspect ratio
-                int newHeight = size.height;
-                int newWidth = (int) (newHeight * ASPECT_RATIO);
-                
-                // Se la larghezza calcolata supera quella disponibile, ridimensiona in base a larghezza
-                if (newWidth > size.width) {
-                    newWidth = size.width;
-                    newHeight = (int) (newWidth / ASPECT_RATIO);
-                }
-
-                gamePanel.updateSize(newWidth);
-
-                // Setta la dimensione preferita del pannello per farlo adattare al ridimensionamento
-                gamePanel.setPreferredSize(new Dimension(newWidth, newHeight));
-                gamePanel.revalidate();
-            }
-        });
+//        addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                Dimension size = getContentPane().getSize();
+//
+//                // Calcola dimensione mantenendo aspect ratio
+//                int newHeight = size.height;
+//                int newWidth = (int) (newHeight * ASPECT_RATIO);
+//                
+//                // Se la larghezza calcolata supera quella disponibile, ridimensiona in base a larghezza
+//                if (newWidth > size.width) {
+//                    newWidth = size.width;
+//                    newHeight = (int) (newWidth / ASPECT_RATIO);
+//                }
+//
+//                gamePanel.updateSize(newWidth);
+//
+//                // Setta la dimensione preferita del pannello per farlo adattare al ridimensionamento
+//                gamePanel.setPreferredSize(new Dimension(newWidth, newHeight));
+//                gamePanel.revalidate();
+//            }
+//        });
+        
+        gamePanel.updateSize(24);
     }
 
     

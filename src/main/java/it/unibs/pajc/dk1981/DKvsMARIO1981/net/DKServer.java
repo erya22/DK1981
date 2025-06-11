@@ -3,34 +3,38 @@ package it.unibs.pajc.dk1981.DKvsMARIO1981.net;
 import java.io.*;
 import java.net.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class DKServer {
-    private static final int PORT = 5555;
+	private static final Logger log = LoggerFactory.getLogger(DKServer.class);
+    public static final int PORT = 5555;
     
     public void start() {
-        System.out.println("[SERVER] Avvio, in ascolto su porta " + PORT);
+    	log.info("[SERVER] Avvio, in ascolto su porta {}", PORT);
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             // 1) Accetta Player1
-            System.out.println("[SERVER] In attesa di Player1...");
+            log.info("[SERVER] In attesa di Player1...");
             Socket client1 = serverSocket.accept();
-            System.out.println("[SERVER] Player1 connesso da: " + client1.getRemoteSocketAddress());
+            log.info("[SERVER] Player1 connesso da: {}", client1.getRemoteSocketAddress());
             BufferedReader in1   = new BufferedReader(new InputStreamReader(client1.getInputStream()));
             PrintWriter out1      = new PrintWriter(client1.getOutputStream(), true);
             String join1 = in1.readLine(); // es: "JOIN#Player1"
-            System.out.println("[SERVER] ricevuto: " + join1);
+            log.info("[SERVER] ricevuto: {}", join1);
 
             // 2) Accetta Player2
-            System.out.println("[SERVER] In attesa di Player2...");
+            log.info("[SERVER] In attesa di Player2...");
             Socket client2 = serverSocket.accept();
-            System.out.println("[SERVER] Player2 connesso da: " + client2.getRemoteSocketAddress());
+            log.info("[SERVER] Player2 connesso da: {}", client2.getRemoteSocketAddress());
             BufferedReader in2   = new BufferedReader(new InputStreamReader(client2.getInputStream()));
             PrintWriter out2      = new PrintWriter(client2.getOutputStream(), true);
             String join2 = in2.readLine(); // es: "JOIN#Player2"
-            System.out.println("[SERVER] ricevuto: " + join2);
+            log.info("[SERVER] ricevuto: {}", join2);
 
             // 3) Entrambi si sono registrati → mando START a tutti e due
             out1.println("START");
             out2.println("START");
-            System.out.println("[SERVER] Inviato START a entrambi i giocatori.");
+            log.info("[SERVER] Inviato START a entrambi i giocatori.");
 
             // QUA IMPLEMENTA BENE QUESTIONE PUNTEGGI!!!
             // 4) Aspetta i due punteggi in due thread separati (ma usando variabili condivise)
@@ -41,10 +45,10 @@ public class DKServer {
                     // es: "SCORE#123"
                     if (line != null && line.startsWith("SCORE#")) {
                         scores[0] = Integer.parseInt(line.substring(6));
-                        System.out.println("[SERVER] Ricevuto score1 = " + scores[0]);
+                        log.info("[SERVER] Ricevuto score1 = {}", scores[0]);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                	log.error("Player1: IOError", e);
                 }
             });
             Thread t2 = new Thread(() -> {
@@ -53,10 +57,10 @@ public class DKServer {
                     // es: "SCORE#150"
                     if (line != null && line.startsWith("SCORE#")) {
                         scores[1] = Integer.parseInt(line.substring(6));
-                        System.out.println("[SERVER] Ricevuto score2 = " + scores[1]);
+                        log.info("[SERVER] Ricevuto score2 = {}", scores[1]);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                	log.error("Player2: IOError", e);
                 }
             });
 
@@ -70,9 +74,9 @@ public class DKServer {
             String winner;
             if (scores[0] > scores[1])            winner = "Player1";
             else if (scores[1] > scores[0])       winner = "Player2";
-            else                                   winner = "DRAW";
+            else                                  winner = "DRAW";
 
-            System.out.println("[SERVER] Fine raccolta punteggi. Vincitore = " + winner);
+            log.info("[SERVER] Fine raccolta punteggi. Vincitore = {}", winner);
 
             // 6) Invio RESULT a entrambi
             out1.println("RESULT#" + winner);
@@ -81,10 +85,10 @@ public class DKServer {
             // 7) Chiudo risorse
             client1.close();
             client2.close();
-            System.out.println("[SERVER] Connessioni chiuse. Server terminato.");
+            log.info("[SERVER] Connessioni chiuse. Server terminato.");
 
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+        	log.error("Server error", e);
         }
     }
 }
